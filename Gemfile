@@ -14,6 +14,7 @@ gem 'bcrypt', '~> 3.1.7'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
+  gem 'rspec-json_matcher'
   gem 'factory_girl_rails'
 end
 
