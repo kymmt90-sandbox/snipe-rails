@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170109082955) do
+ActiveRecord::Schema.define(version: 20170109102449) do
+
+  create_table "snippets", force: :cascade do |t|
+    t.string   "title"
+    t.text     "content",    null: false
+    t.integer  "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_snippets_on_author_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "name",            null: false
