@@ -27,5 +27,17 @@ RSpec.describe User, type: :model do
       user = build(:user, password: '')
       expect(user).not_to be_valid
     end
+
+    context 'user with comments' do
+      let(:user) { create(:user_with_comments) }
+
+      it 'is valid' do
+        expect(user).to be_valid
+      end
+
+      it 'has multiple comments' do
+        expect(user.comments.size).to eq 5
+      end
+    end
   end
 end

@@ -16,5 +16,17 @@ RSpec.describe Snippet, type: :model do
       snippet = build_stubbed(:snippet, author: nil)
       expect(snippet).not_to be_valid
     end
+
+    context 'snippet with comments' do
+      let(:snippet) { create(:snippet_with_comments) }
+
+      it 'is valid' do
+        expect(snippet).to be_valid
+      end
+
+      it 'has multiple comments' do
+        expect(snippet.comments.size).to eq 5
+      end
+    end
   end
 end
