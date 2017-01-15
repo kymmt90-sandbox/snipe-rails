@@ -28,5 +28,17 @@ RSpec.describe Snippet, type: :model do
         expect(snippet.comments.size).to eq 5
       end
     end
+
+    context 'snippet with starred users' do
+      let(:snippet) { create(:snippet_with_starring_users) }
+
+      it 'is valid' do
+        expect(snippet).to be_valid
+      end
+
+      it 'has multiple starring users' do
+        expect(snippet.starring_users.size).to eq 5
+      end
+    end
   end
 end

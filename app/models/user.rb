@@ -5,4 +5,6 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :comments, foreign_key: 'comment_author_id'
+  has_many :stars, foreign_key: 'user_id'
+  has_many :starred_snippets, through: :stars, class_name: 'Snippet'
 end

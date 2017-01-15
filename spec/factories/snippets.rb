@@ -13,5 +13,16 @@ FactoryGirl.define do
         create_list(:comment, evaluator.comments_count, snippet: snippet)
       end
     end
+
+    factory :snippet_with_starring_users do
+      transient do
+        starring_users_count 5
+      end
+
+      after(:create) do |snippet, evaluator|
+        users = create_list(:user, evaluator.starring_users_count)
+        users.each { |user| snippet.starring_users << user }
+      end
+    end
   end
 end
