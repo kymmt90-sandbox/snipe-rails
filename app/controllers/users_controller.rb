@@ -8,12 +8,16 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       render status: :created
+    else
+      render json: @user.errors, status: :bad_request
     end
   end
 
   def update
     if @user.update_attributes(user_params)
       render status: :ok
+    else
+      render json: @user.errors, status: :bad_request
     end
   end
 
