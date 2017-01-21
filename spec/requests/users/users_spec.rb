@@ -27,7 +27,7 @@ RSpec.describe 'User API', type: :request do
         get '/users/1.json'
       end
 
-      include_examples 'User is not found'
+      include_examples 'The resource is not found'
     end
   end
 
@@ -131,7 +131,7 @@ RSpec.describe 'User API', type: :request do
         patch '/users/1.json', params: {}
       end
 
-      include_examples 'User is not found'
+      include_examples 'The resource is not found'
     end
 
     context 'when parameters are invalid' do
@@ -194,7 +194,7 @@ RSpec.describe 'User API', type: :request do
         delete '/users/1.json'
       end
 
-      include_examples 'User is not found'
+      include_examples 'The resource is not found'
     end
   end
 end

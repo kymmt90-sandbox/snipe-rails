@@ -32,7 +32,7 @@ RSpec.describe 'Snippet API', type: :request do
         get '/snippets/1.json'
       end
 
-      include_examples 'Snippet is not found'
+      include_examples 'The resource is not found'
     end
   end
 
@@ -74,7 +74,7 @@ RSpec.describe 'Snippet API', type: :request do
         get '/users/1/snippets.json'
       end
 
-      include_examples 'User is not found'
+      include_examples 'The resource is not found'
     end
   end
 
@@ -154,7 +154,7 @@ RSpec.describe 'Snippet API', type: :request do
         post '/users/1/snippets.json', params: snippet_params
       end
 
-      include_examples 'User is not found'
+      include_examples 'The resource is not found'
     end
 
     context 'when parameters are invalid' do
@@ -236,7 +236,7 @@ RSpec.describe 'Snippet API', type: :request do
     context 'when the specified snippet does not exists' do
       before { patch '/snippets/1.json', params: snippet_params }
 
-      include_examples 'Snippet is not found'
+      include_examples 'The resource is not found'
     end
 
     context 'when parameters are invalid' do
@@ -291,7 +291,7 @@ RSpec.describe 'Snippet API', type: :request do
     context 'when the specified user does not exist' do
       before { delete '/snippets/1.json' }
 
-      include_examples 'User is not found'
+      include_examples 'The resource is not found'
     end
   end
 end
