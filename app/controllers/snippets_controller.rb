@@ -4,8 +4,9 @@ class SnippetsController < ApplicationController
   INDEX_MAX_SNIPPETS = 3000
 
   def index
-    if params[:user_id]
-      @snippets = Snippet.where(author: params[:user_id])
+    if params[:user_id].present?
+      @author = User.find(params[:user_id])
+      @snippets = Snippet.where(author: @author)
     else
       @snippets = Snippet.limit(INDEX_MAX_SNIPPETS)
     end
@@ -19,12 +20,16 @@ class SnippetsController < ApplicationController
     @snippet = Snippet.new(snippet_params.merge(author: @author))
     if @snippet.save
       render status: :created
+    else
+      render json: @snippet.errors, status: :bad_request
     end
   end
 
   def update
     if @snippet.update_attributes(snippet_params)
       render status: :ok
+    else
+      render json: @snippet.errors, status: :bad_request
     end
   end
 
