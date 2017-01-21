@@ -2,24 +2,28 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: [:show, :update, :destroy]
 
   def index
-    @comments = Comment.where(snippet_id: params[:snippet_id])
+    @snippet = Snippet.find(params[:snippet_id])
+    @comments = Comment.where(snippet: @snippet)
   end
 
   def show
   end
 
   def create
-    @comment_author = User.find(params[:comment][:comment_author_id])
     @snippet = Snippet.find(params[:snippet_id])
-    @comment = Comment.new(comment_params.merge(comment_author: @comment_author, snippet: @snippet))
+    @comment = Comment.new(comment_params.merge(snippet: @snippet))
     if @comment.save
       render status: :created
+    else
+      render json: @comment.errors, status: :bad_request
     end
   end
 
   def update
     if @comment.update_attributes(comment_params)
       render status: :ok
+    else
+      render json: @comment.errors, status: :bad_request
     end
   end
 
