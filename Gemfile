@@ -7,6 +7,7 @@ end
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'jbuilder', '~> 2.5'
+gem 'knock'
 gem 'puma', '~> 3.0'
 gem 'rails', '~> 5.0.1'
 gem 'sqlite3'
