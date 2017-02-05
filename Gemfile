@@ -5,18 +5,19 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'bcrypt', '~> 3.1.7'
+gem 'jbuilder', '~> 2.5'
+gem 'knock'
+gem 'puma', '~> 3.0'
 gem 'rails', '~> 5.0.1'
 gem 'sqlite3'
-gem 'puma', '~> 3.0'
-gem 'jbuilder', '~> 2.5'
-gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
   gem 'byebug', platform: :mri
-  gem 'rspec-rails'
-  gem 'rspec-json_matcher'
   gem 'factory_girl_rails'
   gem 'ffaker'
+  gem 'rspec-json_matcher'
+  gem 'rspec-rails'
 end
 
 group :development do

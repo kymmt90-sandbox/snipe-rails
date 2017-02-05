@@ -74,6 +74,8 @@ RSpec.describe 'Comments API', type: :request do
   end
 
   describe 'POST /snippets/:snippet_id/comments.json' do
+    include_context 'the user has the authentication token'
+
     let(:comment_author) { create(:user) }
     let(:snippet) { create(:snippet) }
     let(:comment_attributes) { attributes_for(:comment) }
@@ -88,18 +90,18 @@ RSpec.describe 'Comments API', type: :request do
 
     context 'when the specified snippet exists' do
       it 'returns 201 Created' do
-        post "/snippets/#{snippet.id}/comments.json", params: comment_params
+        post "/snippets/#{snippet.id}/comments.json", params: comment_params, headers: authenticated_header
         expect(response.status).to eq 201
       end
 
       it 'creates a comment' do
         expect {
-          post "/snippets/#{snippet.id}/comments.json", params: comment_params
+          post "/snippets/#{snippet.id}/comments.json", params: comment_params, headers: authenticated_header
         }.to change(Comment, :count).by(1)
       end
 
       it 'returns the comment attributes' do
-        post "/snippets/#{snippet.id}/comments.json", params: comment_params
+        post "/snippets/#{snippet.id}/comments.json", params: comment_params, headers: authenticated_header
         expect(response.body).to be_json_as(
                                    {
                                      id: Numeric,
@@ -114,7 +116,7 @@ RSpec.describe 'Comments API', type: :request do
     end
 
     context 'when the specified snippet does not exists' do
-      before { post '/snippets/1/comments.json', params: comment_params }
+      before { post '/snippets/1/comments.json', params: comment_params, headers: authenticated_header }
 
       include_examples 'The resource is not found'
     end
@@ -122,7 +124,7 @@ RSpec.describe 'Comments API', type: :request do
     context 'when parameters are invalid' do
       before do
         comment_params[:comment][:content] = ''
-        post "/snippets/#{snippet.id}/comments.json", params: comment_params
+        post "/snippets/#{snippet.id}/comments.json", params: comment_params, headers: authenticated_header
       end
 
       it 'returns 400 Bad Request' do
@@ -139,7 +141,7 @@ RSpec.describe 'Comments API', type: :request do
     end
 
     context 'when parameters are empty' do
-      before { post "/snippets/#{snippet.id}/comments.json", params: {} }
+      before { post "/snippets/#{snippet.id}/comments.json", params: {}, headers: authenticated_header }
 
       it 'returns 400 Bad Request' do
         expect(response.status).to eq 400
@@ -156,6 +158,8 @@ RSpec.describe 'Comments API', type: :request do
   end
 
   describe 'PATCH /comments/:id.json' do
+    include_context 'the user has the authentication token'
+
     let(:comment) { create(:comment) }
     let(:comment_params) {
       {
@@ -167,12 +171,12 @@ RSpec.describe 'Comments API', type: :request do
 
     context 'when the specified comment exists' do
       it 'returns 200 OK' do
-        patch "/comments/#{comment.id}.json", params: comment_params
+        patch "/comments/#{comment.id}.json", params: comment_params, headers: authenticated_header
         expect(response.status).to eq 200
       end
 
       it 'updates the comment' do
-        patch "/comments/#{comment.id}.json", params: comment_params
+        patch "/comments/#{comment.id}.json", params: comment_params, headers: authenticated_header
         expect(response.body).to be_json_as(
                                    {
                                      id: comment.id,
@@ -188,7 +192,7 @@ RSpec.describe 'Comments API', type: :request do
     end
 
     context 'when the specified comment does not exist' do
-      before { patch '/comments/1.json', params: comment_params }
+      before { patch '/comments/1.json', params: comment_params, headers: authenticated_header }
 
       include_examples 'The resource is not found'
     end
@@ -196,7 +200,7 @@ RSpec.describe 'Comments API', type: :request do
     context 'when parameters are invalid' do
       before do
         comment_params[:comment][:content] = ''
-        patch "/comments/#{comment.id}.json", params: comment_params
+        patch "/comments/#{comment.id}.json", params: comment_params, headers: authenticated_header
       end
 
       it 'returns 400 Bad Request' do
@@ -213,7 +217,7 @@ RSpec.describe 'Comments API', type: :request do
     end
 
     context 'when parameters are empty' do
-      before { patch "/comments/#{comment.id}.json", params: {} }
+      before { patch "/comments/#{comment.id}.json", params: {}, headers: authenticated_header }
 
       it 'returns 400 Bad Request' do
         expect(response.status).to eq 400
@@ -230,23 +234,25 @@ RSpec.describe 'Comments API', type: :request do
   end
 
   describe 'DELETE /comments/:id.json' do
+    include_context 'the user has the authentication token'
+
     context 'when the specified comment exists' do
       let!(:comment) { create(:comment) }
 
       it 'returns 204 No Content' do
-        delete "/comments/#{comment.id}.json"
+        delete "/comments/#{comment.id}.json", headers: authenticated_header
         expect(response.status).to eq 204
       end
 
       it 'destroy the comment' do
         expect {
-          delete "/comments/#{comment.id}.json"
+          delete "/comments/#{comment.id}.json", headers: authenticated_header
         }.to change(Comment, :count).by(-1)
       end
     end
 
     context 'when the specified comment does not exist' do
-      before { delete '/comments/1.json' }
+      before { delete '/comments/1.json', headers: authenticated_header }
 
       include_examples 'The resource is not found'
     end
