@@ -16,6 +16,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rspec-json_matcher'
   gem 'factory_girl_rails'
+  gem 'ffaker'
 end
 
 group :development do
