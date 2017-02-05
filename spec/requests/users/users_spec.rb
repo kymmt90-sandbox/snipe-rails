@@ -96,7 +96,7 @@ RSpec.describe 'User API', type: :request do
   end
 
   describe 'PATCH /users/:id' do
-    let(:user) { create(:user) }
+    include_context 'the user has the authentication token'
 
     context 'when the specified user exists' do
       let(:attributes_for_update) {
@@ -110,7 +110,7 @@ RSpec.describe 'User API', type: :request do
       }
 
       before do
-        patch "/users/#{user.id}.json", params: attributes_for_update
+        patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
       end
 
       it 'returns 200 OK' do
@@ -128,7 +128,7 @@ RSpec.describe 'User API', type: :request do
 
     context 'when the specfied user does not exist' do
       before do
-        patch '/users/1.json', params: {}
+        patch "/users/#{User.last.id.succ}.json", params: {}, headers: authenticated_header
       end
 
       include_examples 'The resource is not found'
@@ -138,7 +138,7 @@ RSpec.describe 'User API', type: :request do
       let(:invalid_user_attributes) { { user: { name: '', email: 'foo@example.com', password: 'passw0rd' } } }
 
       before do
-        patch "/users/#{user.id}.json", params: invalid_user_attributes
+        patch "/users/#{user.id}.json", params: invalid_user_attributes, headers: authenticated_header
       end
 
       it 'returns 400 Bad Request' do
@@ -156,7 +156,7 @@ RSpec.describe 'User API', type: :request do
 
     context 'when paramters are empty' do
       before do
-        patch "/users/#{user.id}.json", params: {}
+        patch "/users/#{user.id}.json", params: {}, headers: authenticated_header
       end
 
       it 'returns 400 Bad Request' do
@@ -174,24 +174,24 @@ RSpec.describe 'User API', type: :request do
   end
 
   describe 'DELETE /users/:id' do
-    context 'when the specified user exists' do
-      let!(:user) { create(:user) }
+    include_context 'the user has the authentication token'
 
+    context 'when the specified user exists' do
       it 'returns 204 No Content' do
-        delete "/users/#{user.id}.json"
+        delete "/users/#{user.id}.json", headers: authenticated_header
         expect(response.status).to eq 204
       end
 
       it 'destroys the user' do
         expect {
-          delete "/users/#{user.id}.json"
+          delete "/users/#{user.id}.json", headers: authenticated_header
         }.to change(User, :count).by(-1)
       end
     end
 
     context 'when the specfied user does not exist' do
       before do
-        delete '/users/1.json'
+        delete "/users/#{User.last.id.succ}.json", headers: authenticated_header
       end
 
       include_examples 'The resource is not found'

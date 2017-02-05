@@ -120,22 +120,23 @@ RSpec.describe 'Snippet API', type: :request do
           }
       }
     }
-    let(:user) { create(:user) }
+
+    include_context 'the user has the authentication token'
 
     context 'when the specified user exists and parameters are valid' do
       it 'returns 201 Created' do
-        post "/users/#{user.id}/snippets.json", params: snippet_params
+        post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
         expect(response.status).to eq 201
       end
 
       it 'creates a snippet' do
         expect  {
-          post "/users/#{user.id}/snippets.json", params: snippet_params
+          post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
         }.to change(Snippet, :count).by(1)
       end
 
       it 'returns the created snippet attributes' do
-        post "/users/#{user.id}/snippets.json", params: snippet_params
+        post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
         expect(response.body).to be_json_as(
                                    {
                                      id:      Numeric,
@@ -151,7 +152,7 @@ RSpec.describe 'Snippet API', type: :request do
 
     context 'when the specified user does not exist' do
       before do
-        post '/users/1/snippets.json', params: snippet_params
+        post "/users/#{User.last.id.succ}/snippets.json", params: snippet_params, headers: authenticated_header
       end
 
       include_examples 'The resource is not found'
@@ -159,7 +160,7 @@ RSpec.describe 'Snippet API', type: :request do
 
     context 'when parameters are invalid' do
       before do
-        post "/users/#{user.id}/snippets.json", params: snippet_params.merge(snippet: { content: ''})
+        post "/users/#{user.id}/snippets.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header
       end
 
       it 'returns 400 Bad Request' do
@@ -177,7 +178,7 @@ RSpec.describe 'Snippet API', type: :request do
 
     context 'when parameters are empty' do
       before do
-        post "/users/#{user.id}/snippets.json", params: {}
+        post "/users/#{user.id}/snippets.json", params: {}, headers: authenticated_header
       end
 
       it 'returns 400 Bad Request' do
@@ -195,6 +196,8 @@ RSpec.describe 'Snippet API', type: :request do
   end
 
   describe 'PATCH /snippets/:id' do
+    include_context 'the user has the authentication token'
+
     let(:snippet) { create(:snippet) }
     let(:snippet_params) {
       { snippet:
@@ -207,7 +210,7 @@ RSpec.describe 'Snippet API', type: :request do
 
     context 'when the specified snippet exists and parameters are valid' do
       before do
-        patch "/snippets/#{snippet.id}.json", params: snippet_params
+        patch "/snippets/#{snippet.id}.json", params: snippet_params, headers: authenticated_header
       end
 
       it 'returns 200 OK' do
@@ -234,13 +237,13 @@ RSpec.describe 'Snippet API', type: :request do
     end
 
     context 'when the specified snippet does not exists' do
-      before { patch '/snippets/1.json', params: snippet_params }
+      before { patch '/snippets/1.json', params: snippet_params, headers: authenticated_header }
 
       include_examples 'The resource is not found'
     end
 
     context 'when parameters are invalid' do
-      before { patch "/snippets/#{snippet.id}.json", params: snippet_params.merge(snippet: { content: '' }) }
+      before { patch "/snippets/#{snippet.id}.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header }
 
       it 'returns 400 Bad Request' do
         expect(response.status).to eq 400
@@ -256,7 +259,7 @@ RSpec.describe 'Snippet API', type: :request do
     end
 
     context 'when parameters are empty' do
-      before { patch "/snippets/#{snippet.id}.json", params: {} }
+      before { patch "/snippets/#{snippet.id}.json", params: {}, headers: authenticated_header }
 
       it 'returns 400 Bad Request' do
         expect(response.status).to eq 400
@@ -273,23 +276,25 @@ RSpec.describe 'Snippet API', type: :request do
   end
 
   describe 'DELETE /snippets/:snippet_id' do
+    include_context 'the user has the authentication token'
+
     context 'when the specified snippet exists' do
       let!(:snippet) { create(:snippet) }
 
       it 'returns 204 No Content' do
-        delete "/snippets/#{snippet.id}.json"
+        delete "/snippets/#{snippet.id}.json", headers: authenticated_header
         expect(response.status).to eq 204
       end
 
       it 'destroys the snippet' do
         expect {
-          delete "/snippets/#{snippet.id}.json"
+          delete "/snippets/#{snippet.id}.json", headers: authenticated_header
         }.to change(Snippet, :count).by(-1)
       end
     end
 
     context 'when the specified user does not exist' do
-      before { delete '/snippets/1.json' }
+      before { delete '/snippets/1.json', headers: authenticated_header }
 
       include_examples 'The resource is not found'
     end
