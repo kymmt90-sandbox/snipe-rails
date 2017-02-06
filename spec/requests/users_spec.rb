@@ -109,20 +109,33 @@ RSpec.describe 'User API', type: :request do
         }
       }
 
-      before do
-        patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
-      end
-
       it 'returns 200 OK' do
+        patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
         expect(response.status).to eq 200
       end
 
       it 'returns the updated user attributes' do
+        patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
         expect(response.body).to be_json_as(
                                    {
                                      id:   user.id,
                                      name: attributes_for_update[:user][:name]
                                    })
+      end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
+          expect(response.status).to eq 401
+        end
+
+        it 'returns an empty JSON' do
+          patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
+          expect(response.body).to be_json_as({})
+        end
       end
     end
 
@@ -186,6 +199,21 @@ RSpec.describe 'User API', type: :request do
         expect {
           delete "/users/#{user.id}.json", headers: authenticated_header
         }.to change(User, :count).by(-1)
+      end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          delete "/users/#{user.id}.json", headers: authenticated_header
+          expect(response.status).to eq 401
+        end
+
+        it 'returns an empty JSON' do
+          delete "/users/#{user.id}.json", headers: authenticated_header
+          expect(response.body).to be_json_as({})
+        end
       end
     end
 
