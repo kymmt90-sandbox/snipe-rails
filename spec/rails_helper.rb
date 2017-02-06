@@ -62,4 +62,7 @@ RSpec.configure do |config|
   config.include RSpec::JsonMatcher
 
   require 'support/factory_girl'
+
+  require 'support/test_helper'
+  config.include TestHelper
 end
