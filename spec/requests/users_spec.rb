@@ -131,11 +131,6 @@ RSpec.describe 'User API', type: :request do
           patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
           expect(response.status).to eq 401
         end
-
-        it 'returns an empty JSON' do
-          patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
-          expect(response.body).to be_json_as({})
-        end
       end
     end
 
@@ -208,11 +203,6 @@ RSpec.describe 'User API', type: :request do
         it 'returns 401 Unauthorized' do
           delete "/users/#{user.id}.json", headers: authenticated_header
           expect(response.status).to eq 401
-        end
-
-        it 'returns an empty JSON' do
-          delete "/users/#{user.id}.json", headers: authenticated_header
-          expect(response.body).to be_json_as({})
         end
       end
     end

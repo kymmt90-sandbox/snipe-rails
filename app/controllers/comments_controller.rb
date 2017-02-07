@@ -11,38 +11,32 @@ class CommentsController < ApplicationController
   end
 
   def create
-    if current_user.id == comment_params[:comment_author_id].to_i
-      @snippet = Snippet.find(params[:snippet_id])
-      @comment = Comment.new(comment_params.merge(snippet: @snippet))
-      if @comment.save
-        render status: :created
-      else
-        render json: @comment.errors, status: :bad_request
-      end
+    head :unauthorized and return unless current_user.id == comment_params[:comment_author_id].to_i
+
+    @snippet = Snippet.find(params[:snippet_id])
+    @comment = Comment.new(comment_params.merge(snippet: @snippet))
+    if @comment.save
+      render status: :created
     else
-      render json: {}, status: :unauthorized
+      render json: @comment.errors, status: :bad_request
     end
   end
 
   def update
-    if current_user == @comment.comment_author
-      if @comment.update_attributes(comment_params)
-        render status: :ok
-      else
-        render json: @comment.errors, status: :bad_request
-      end
+    head :unauthorized and return unless current_user == @comment.comment_author
+
+    if @comment.update_attributes(comment_params)
+      render status: :ok
     else
-      render json: {}, status: :unauthorized
+      render json: @comment.errors, status: :bad_request
     end
   end
 
   def destroy
-    if current_user == @comment.comment_author
-      @comment.destroy!
-      head :no_content
-    else
-      render json: {}, status: :unauthorized
-    end
+    head :unauthorized and return unless current_user == @comment.comment_author
+
+    @comment.destroy!
+    head :no_content
   end
 
   private

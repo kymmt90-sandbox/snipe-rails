@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
   before_action :authenticate_user, only: [:update, :destroy]
-  before_action :must_be_oneself, only: [:update, :destroy]
 
   def show
   end
@@ -16,6 +15,8 @@ class UsersController < ApplicationController
   end
 
   def update
+    head :unauthorized and return unless current_user == @user
+
     if @user.update_attributes(user_params)
       render status: :ok
     else
@@ -24,6 +25,8 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    head :unauthorized and return unless current_user == @user
+
     @user.destroy!
     head :no_content
   end
@@ -36,9 +39,5 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email, :password)
-  end
-
-  def must_be_oneself
-    render json: {}, status: :unauthorized unless current_user == @user
   end
 end

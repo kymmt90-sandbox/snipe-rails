@@ -122,11 +122,6 @@ RSpec.describe 'Comments API', type: :request do
           post "/snippets/#{snippet.id}/comments.json", params: comment_params, headers: authenticated_header
           expect(response.status).to eq 401
         end
-
-        it 'returns empty JSON' do
-          post "/snippets/#{snippet.id}/comments.json", params: comment_params, headers: authenticated_header
-          expect(response.body).to be_json_as({})
-        end
       end
     end
 
@@ -213,11 +208,6 @@ RSpec.describe 'Comments API', type: :request do
           patch "/comments/#{comment.id}.json", params: comment_params, headers: authenticated_header
           expect(response.status).to eq 401
         end
-
-        it 'returns empty JSON' do
-          patch "/comments/#{comment.id}.json", params: comment_params, headers: authenticated_header
-          expect(response.body).to be_json_as({})
-        end
       end
     end
 
@@ -287,11 +277,6 @@ RSpec.describe 'Comments API', type: :request do
         it 'returns 401 Unauthorized' do
           delete "/comments/#{comment.id}.json", headers: authenticated_header
           expect(response.status).to eq 401
-        end
-
-        it 'returns empty JSON' do
-          delete "/comments/#{comment.id}.json", headers: authenticated_header
-          expect(response.body).to be_json_as({})
         end
       end
     end

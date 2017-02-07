@@ -18,37 +18,31 @@ class SnippetsController < ApplicationController
 
   def create
     @author = User.find(params[:user_id])
-    if current_user == @author
-      @snippet = Snippet.new(snippet_params.merge(author: @author))
-      if @snippet.save
-        render status: :created
-      else
-        render json: @snippet.errors, status: :bad_request
-      end
+    head :unauthorized and return unless current_user == @author
+
+    @snippet = Snippet.new(snippet_params.merge(author: @author))
+    if @snippet.save
+      render status: :created
     else
-      render json: {}, status: :unauthorized
+      render json: @snippet.errors, status: :bad_request
     end
   end
 
   def update
-    if current_user == @snippet.author
-      if @snippet.update_attributes(snippet_params)
-        render status: :ok
-      else
-        render json: @snippet.errors, status: :bad_request
-      end
+    head :unauthorized and return unless current_user == @snippet.author
+
+    if @snippet.update_attributes(snippet_params)
+      render status: :ok
     else
-      render json: {}, status: :unauthorized
+      render json: @snippet.errors, status: :bad_request
     end
   end
 
   def destroy
-    if current_user == @snippet.author
-      @snippet.destroy!
-      head :no_content
-    else
-      render json: {}, status: :unauthorized
-    end
+    head :unauthorized and return unless current_user == @snippet.author
+
+    @snippet.destroy!
+    head :no_content
   end
 
   private
