@@ -66,6 +66,16 @@ RSpec.describe 'Star API', type: :request do
           put "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }, headers: authenticated_header
         }.not_to change(Star, :count)
       end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          put "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }, headers: authenticated_header
+          expect(response.status).to eq 401
+        end
+      end
     end
 
     context 'when the specified snippet does not exist' do
@@ -98,6 +108,16 @@ RSpec.describe 'Star API', type: :request do
         expect {
           delete "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }, headers: authenticated_header
         }.to change(Star, :count).by(-1)
+      end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          delete "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }, headers: authenticated_header
+          expect(response.status).to eq 401
+        end
       end
     end
 

@@ -76,14 +76,14 @@ RSpec.describe 'Comments API', type: :request do
   describe 'POST /snippets/:snippet_id/comments.json' do
     include_context 'the user has the authentication token'
 
-    let(:comment_author) { create(:user) }
-    let(:snippet) { create(:snippet) }
+    let(:snippet_author) { create(:user) }
+    let(:snippet) { create(:snippet, author: snippet_author) }
     let(:comment_attributes) { attributes_for(:comment) }
     let(:comment_params) {
       {
         comment: {
           content: comment_attributes[:content],
-          comment_author_id: comment_author.id
+          comment_author_id: user.id
         }
       }
     }
@@ -107,11 +107,21 @@ RSpec.describe 'Comments API', type: :request do
                                      id: Numeric,
                                      content: comment_attributes[:content],
                                      author: {
-                                       id: comment_author.id,
-                                       name: comment_author.name
+                                       id:   user.id,
+                                       name: user.name
                                      },
                                      snippet_id: snippet.id
                                    })
+      end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          post "/snippets/#{snippet.id}/comments.json", params: comment_params, headers: authenticated_header
+          expect(response.status).to eq 401
+        end
       end
     end
 
@@ -160,7 +170,7 @@ RSpec.describe 'Comments API', type: :request do
   describe 'PATCH /comments/:id.json' do
     include_context 'the user has the authentication token'
 
-    let(:comment) { create(:comment) }
+    let(:comment) { create(:comment, comment_author: user) }
     let(:comment_params) {
       {
         comment: {
@@ -188,6 +198,16 @@ RSpec.describe 'Comments API', type: :request do
                                      snippet_id: comment.snippet.id
                                    }
                                  )
+      end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          patch "/comments/#{comment.id}.json", params: comment_params, headers: authenticated_header
+          expect(response.status).to eq 401
+        end
       end
     end
 
@@ -237,7 +257,7 @@ RSpec.describe 'Comments API', type: :request do
     include_context 'the user has the authentication token'
 
     context 'when the specified comment exists' do
-      let!(:comment) { create(:comment) }
+      let!(:comment) { create(:comment, comment_author: user) }
 
       it 'returns 204 No Content' do
         delete "/comments/#{comment.id}.json", headers: authenticated_header
@@ -248,6 +268,16 @@ RSpec.describe 'Comments API', type: :request do
         expect {
           delete "/comments/#{comment.id}.json", headers: authenticated_header
         }.to change(Comment, :count).by(-1)
+      end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          delete "/comments/#{comment.id}.json", headers: authenticated_header
+          expect(response.status).to eq 401
+        end
       end
     end
 

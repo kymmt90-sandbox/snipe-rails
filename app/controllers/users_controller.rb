@@ -15,6 +15,8 @@ class UsersController < ApplicationController
   end
 
   def update
+    head :unauthorized and return unless current_user == @user
+
     if @user.update_attributes(user_params)
       render status: :ok
     else
@@ -23,6 +25,8 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    head :unauthorized and return unless current_user == @user
+
     @user.destroy!
     head :no_content
   end

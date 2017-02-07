@@ -11,6 +11,8 @@ class CommentsController < ApplicationController
   end
 
   def create
+    head :unauthorized and return unless current_user.id == comment_params[:comment_author_id].to_i
+
     @snippet = Snippet.find(params[:snippet_id])
     @comment = Comment.new(comment_params.merge(snippet: @snippet))
     if @comment.save
@@ -21,6 +23,8 @@ class CommentsController < ApplicationController
   end
 
   def update
+    head :unauthorized and return unless current_user == @comment.comment_author
+
     if @comment.update_attributes(comment_params)
       render status: :ok
     else
@@ -29,6 +33,8 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    head :unauthorized and return unless current_user == @comment.comment_author
+
     @comment.destroy!
     head :no_content
   end

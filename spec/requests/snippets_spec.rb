@@ -148,6 +148,16 @@ RSpec.describe 'Snippet API', type: :request do
                                      }
                                    })
       end
+
+      context 'when other user sends the request' do
+        let(:other_user) { create(:user) }
+        let(:authenticated_header) { authentication_token_header(other_user) }
+
+        it 'returns 401 Unauthorized' do
+          post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
+          expect(response.status).to eq 401
+        end
+      end
     end
 
     context 'when the specified user does not exist' do
@@ -198,7 +208,7 @@ RSpec.describe 'Snippet API', type: :request do
   describe 'PATCH /snippets/:id' do
     include_context 'the user has the authentication token'
 
-    let(:snippet) { create(:snippet) }
+    let(:snippet) { create(:snippet, author: user) }
     let(:snippet_params) {
       { snippet:
           {
@@ -279,7 +289,7 @@ RSpec.describe 'Snippet API', type: :request do
     include_context 'the user has the authentication token'
 
     context 'when the specified snippet exists' do
-      let!(:snippet) { create(:snippet) }
+      let!(:snippet) { create(:snippet, author: user) }
 
       it 'returns 204 No Content' do
         delete "/snippets/#{snippet.id}.json", headers: authenticated_header
