@@ -12,16 +12,16 @@ class StarsController < ApplicationController
   end
 
   def create
-    unless @user.starred_snippets.exists?(@snippet.id)
-      @user.starred_snippets << @snippet
-    end
+    head :unauthorized and return unless current_user == @user
 
+    @user.starred_snippets << @snippet unless @user.starred_snippets.exists?(@snippet.id)
     head :no_content
   end
 
   def destroy
-    @user.starred_snippets.destroy(@snippet)
+    head :unauthorized and return unless current_user == @user
 
+    @user.starred_snippets.destroy(@snippet)
     head :no_content
   end
 
