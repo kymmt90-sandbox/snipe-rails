@@ -11,6 +11,7 @@ gem 'knock'
 gem 'puma', '~> 3.0'
 gem 'rails', '~> 5.0.1'
 gem 'sqlite3'
+gem 'swagger-blocks'
 
 group :development, :test do
   gem 'byebug', platform: :mri
