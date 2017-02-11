@@ -20,6 +20,7 @@ class ApidocsController < ApplicationController
   end
 
   SWAGGERED_CLASSES = [
+    User,
     self
   ].freeze
 
