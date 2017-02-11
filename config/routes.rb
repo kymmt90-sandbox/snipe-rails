@@ -8,4 +8,5 @@ Rails.application.routes.draw do
     end
   end
   resources :snippets, only: [:index]
+  resources :apidocs, only: [:index]
 end

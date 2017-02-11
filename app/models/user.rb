@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Swagger::UserSchema
+
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
 
