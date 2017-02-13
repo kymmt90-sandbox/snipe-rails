@@ -17,7 +17,7 @@ module Swagger::RootSchema
           key :name, 'MIT'
         end
       end
-      key :basePath, '/api'
+      key :basePath, '/'
       key :consumes, ['application/json']
       key :produces, ['application/json']
     end
