@@ -21,5 +21,16 @@ module Swagger::UserSchema
         key :format, :password
       end
     end
+
+    swagger_schema :UserOutput do
+      key :required, [:id, :name]
+      property :id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :name do
+        key :type, :string
+      end
+    end
   end
 end

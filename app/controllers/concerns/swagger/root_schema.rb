@@ -24,6 +24,7 @@ module Swagger::RootSchema
 
     SWAGGERED_CLASSES = [
       User,
+      UsersController,
       self
     ].freeze
   end
