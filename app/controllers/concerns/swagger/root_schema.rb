@@ -20,6 +20,11 @@ module Swagger::RootSchema
       key :basePath, '/'
       key :consumes, ['application/json']
       key :produces, ['application/json']
+
+      security_definition :api_key, type: :api_key do
+        key :name, 'Authorization'
+        key :in, :header
+      end
     end
 
     SWAGGERED_CLASSES = [

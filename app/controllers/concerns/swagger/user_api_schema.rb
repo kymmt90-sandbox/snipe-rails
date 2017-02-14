@@ -99,6 +99,8 @@ module Swagger::UserApiSchema
             key :'$ref', :UserOutput
           end
         end
+
+        security api_key: []
       end
 
       operation :delete do
@@ -117,6 +119,8 @@ module Swagger::UserApiSchema
         response 204 do
           key :description, 'no content'
         end
+
+        security api_key: []
       end
     end
   end
