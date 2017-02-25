@@ -1,4 +1,6 @@
 class SnippetsController < ApplicationController
+  include Swagger::SnippetApiSchema
+
   before_action :set_snippet, only: [:show, :update, :destroy]
   before_action :authenticate_user, only: [:create, :update, :destroy]
 
