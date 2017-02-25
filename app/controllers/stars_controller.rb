@@ -1,7 +1,7 @@
 class StarsController < ApplicationController
   before_action :set_user
   before_action :set_snippet
-  before_action :authenticate_user
+  before_action :authenticate_user, only: [:create, :destroy]
 
   def show
     if @user.starred_snippets.exists?(@snippet.id)

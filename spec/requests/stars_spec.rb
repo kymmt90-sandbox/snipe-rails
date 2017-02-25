@@ -11,14 +11,14 @@ RSpec.describe 'Star API', type: :request do
         before { user.starred_snippets << snippet }
 
         it 'returns 204 No Content' do
-          get "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }, headers: authenticated_header
+          get "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }
           expect(response.status).to eq 204
         end
       end
 
       context 'when the user has not starred the snippet' do
         it 'returns 404 Not Found' do
-          get "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }, headers: authenticated_header
+          get "/snippets/#{snippet.id}/star.json", params: { user_id: user.id }
           expect(response.status).to eq 404
         end
       end
