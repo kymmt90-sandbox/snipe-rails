@@ -5,11 +5,6 @@ module Swagger::UserSchema
     include Swagger::Blocks
 
     swagger_schema :User do
-      key :required, [:id, :name, :email, :password]
-      property :id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :name do
         key :type, :string
       end
@@ -19,6 +14,28 @@ module Swagger::UserSchema
       property :password do
         key :type, :string
         key :format, :password
+      end
+    end
+
+    swagger_schema :UserInput do
+      allOf do
+        schema do
+          key '$ref', :User
+        end
+        schema do
+          key :required, [:name, :email, :password]
+        end
+      end
+    end
+
+    swagger_schema :UserOutput do
+      key :required, [:id, :name]
+      property :id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :name do
+        key :type, :string
       end
     end
   end

@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include Swagger::UserApiSchema
+
   before_action :set_user, only: [:show, :update, :destroy]
   before_action :authenticate_user, only: [:update, :destroy]
 
