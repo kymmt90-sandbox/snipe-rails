@@ -30,6 +30,7 @@ module Swagger::RootSchema
     SWAGGERED_CLASSES = [
       User,
       UsersController,
+      Snippet,
       self
     ].freeze
   end
