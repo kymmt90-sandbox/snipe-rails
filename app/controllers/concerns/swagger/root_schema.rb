@@ -32,6 +32,7 @@ module Swagger::RootSchema
       UsersController,
       Snippet,
       SnippetsController,
+      Comment,
       self
     ].freeze
   end
