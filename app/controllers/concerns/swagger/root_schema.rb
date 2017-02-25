@@ -34,6 +34,7 @@ module Swagger::RootSchema
       SnippetsController,
       Comment,
       CommentsController,
+      StarsController,
       self
     ].freeze
   end

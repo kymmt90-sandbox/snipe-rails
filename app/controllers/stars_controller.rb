@@ -1,4 +1,6 @@
 class StarsController < ApplicationController
+  include Swagger::StarApiSchema
+
   before_action :set_snippet
   before_action :authenticate_user
 
