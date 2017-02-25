@@ -4,6 +4,30 @@ module Swagger::UserApiSchema
   included do
     include Swagger::Blocks
 
+    swagger_path '/users' do
+      operation :post do
+        key :description, 'Creates a user'
+        key :operationId, 'createUser'
+
+        parameter do
+          key :name, :user
+          key :in, :body
+          key :description, 'The created user'
+          key :required, true
+          schema do
+            key :'$ref', :UserInput
+          end
+        end
+
+        response 201 do
+          key :description, 'user response'
+          schema do
+            key :'$ref', :UserOutput
+          end
+        end
+      end
+    end
+
     swagger_path '/users/{id}' do
       operation :get do
         key :description, 'Returns a user'
@@ -26,41 +50,6 @@ module Swagger::UserApiSchema
         end
       end
 
-      operation :post do
-        key :description, 'Creates a user'
-        key :operationId, 'createUser'
-
-        parameter do
-          key :name, :name
-          key :in, :query
-          key :description, 'User name'
-          key :required, true
-          key :type, :string
-        end
-        parameter do
-          key :name, :email
-          key :in, :query
-          key :description, 'User email address'
-          key :required, true
-          key :type, :string
-        end
-        parameter do
-          key :name, :password
-          key :in, :query
-          key :description, 'User password'
-          key :required, true
-          key :type, :string
-          key :format, :password
-        end
-
-        response 201 do
-          key :description, 'user response'
-          schema do
-            key :'$ref', :UserOutput
-          end
-        end
-      end
-
       operation :patch do
         key :description, 'Updates a user'
         key :operationId, 'updateUser'
@@ -73,24 +62,15 @@ module Swagger::UserApiSchema
           key :type, :integer
           key :format, :int64
         end
+
         parameter do
-          key :name, :name
-          key :in, :query
-          key :description, 'User name'
-          key :type, :string
-        end
-        parameter do
-          key :name, :email
-          key :in, :query
-          key :description, 'User email address'
-          key :type, :string
-        end
-        parameter do
-          key :name, :password
-          key :in, :query
-          key :description, 'User password'
-          key :type, :string
-          key :format, :password
+          key :name, :user
+          key :in, :body
+          key :description, 'The updated user attributes'
+          key :required, true
+          schema do
+            key :'$ref', :User
+          end
         end
 
         response 200 do
