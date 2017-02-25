@@ -20,8 +20,10 @@ module Swagger::CommentApiSchema
 
         response 200 do
           key :description, 'The comments response'
-          schema do
-            key :'$ref', :CommentOutput
+          schema type: :array do
+            items do
+              key :'$ref', :CommentOutput
+            end
           end
         end
       end
