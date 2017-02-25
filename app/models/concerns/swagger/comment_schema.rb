@@ -22,32 +22,28 @@ module Swagger::CommentSchema
     end
 
     swagger_schema :CommentOutput do
-      allOf do
-        schema do
-          key '$ref', :Comment
+      key :required, [:id, :content, :author, :snippet_id]
+      property :id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :content do
+        key :type, :string
+      end
+      property :author do
+        key :type, :object
+        key :required, [:id, :name]
+        property :id do
+          key :type, :integer
+          key :format, :int64
         end
-        schema do
-          key :required, [:id, :content, :author, :snippet_id]
-          property :id do
-            key :type, :integer
-            key :format, :int64
-          end
-          property :author do
-            key :type, :object
-            key :required, [:id, :name]
-            property :id do
-              key :type, :integer
-              key :format, :int64
-            end
-            property :name do
-              key :type, :string
-            end
-          end
-          property :snippet_id do
-            key :type, :integer
-            key :format, :int64
-          end
+        property :name do
+          key :type, :string
         end
+      end
+      property :snippet_id do
+        key :type, :integer
+        key :format, :int64
       end
     end
   end
