@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  post 'user_token' => 'user_token#create'
+  post 'user_token', to: 'user_token#create'
   resources :users, except: [:index] do
     resources :snippets, shallow: true do
       resources :comments, shallow: true
@@ -8,5 +8,5 @@ Rails.application.routes.draw do
     end
   end
   resources :snippets, only: [:index]
-  resources :apidocs, only: [:index]
+  get 'api-docs', to: 'apidocs#index'
 end
