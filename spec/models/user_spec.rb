@@ -29,26 +29,28 @@ RSpec.describe User, type: :model do
     end
 
     context 'user with comments' do
-      let(:user) { create(:user_with_comments) }
+      let(:user) { create(:user_with_comments, comments_count: comments_count) }
+      let(:comments_count) { 2 }
 
       it 'is valid' do
         expect(user).to be_valid
       end
 
       it 'has multiple comments' do
-        expect(user.comments.size).to eq 5
+        expect(user.comments.size).to eq comments_count
       end
     end
 
     context 'user with starring snippets' do
-      let(:user) { create(:user_with_starred_snippets) }
+      let(:user) { create(:user_with_starred_snippets, starred_snippets_count: starred_snippets_count) }
+      let(:starred_snippets_count) { 2 }
 
       it 'is valid' do
         expect(user).to be_valid
       end
 
       it 'has multiple starred snippets' do
-        expect(user.starred_snippets.size).to eq 5
+        expect(user.starred_snippets.size).to eq starred_snippets_count
       end
     end
   end

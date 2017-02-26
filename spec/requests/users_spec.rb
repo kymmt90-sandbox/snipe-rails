@@ -5,20 +5,16 @@ RSpec.describe 'User API', type: :request do
     context 'when the specified user exists' do
       let(:user) { create(:user) }
 
-      before do
-        get "/users/#{user.id}.json"
-      end
-
-      it 'returns 200 OK' do
-        expect(response.status).to eq 200
-      end
-
       it 'returns the user attributes' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     id:   user.id,
-                                     name: user.name
-                                   })
+        get "/users/#{user.id}.json"
+
+        expect(response.status).to eq 200
+
+        expected_json = {
+          id:   user.id,
+          name: user.name
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
@@ -35,62 +31,54 @@ RSpec.describe 'User API', type: :request do
     context 'when parameters is valid' do
       let(:user_attributes) { attributes_for(:user) }
 
-      it 'returns 201 Created' do
-        post '/users.json', params: { user: user_attributes }
-        expect(response.status).to eq 201
-      end
-
-      it 'creates the user' do
+      it 'creates the user and returns its attributes' do
         expect {
           post '/users.json', params: { user: user_attributes }
-        }.to change(User, :count).by(1)
-      end
+        }.to change(User, :count).by 1
 
-      it 'returns the created user attributes' do
-        post '/users.json', params: { user: user_attributes }
-        expect(response.body).to be_json_as(
-                                   {
-                                     id:   Numeric,
-                                     name: user_attributes[:name]
-                                   })
+        expect(response.status).to eq 201
+
+        expected_json = {
+          id:   Numeric,
+          name: user_attributes[:name]
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
     context 'when parameters are invalid' do
-      let(:invalid_user_attributes) { { user: { name: '', email: 'foo@example.com', password: 'passw0rd' } } }
-
-      before do
-        post '/users.json', params: invalid_user_attributes
-      end
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
+      let(:invalid_user_attributes) {
+        {
+          user: {
+            name:     '',
+            email:    'foo@example.com',
+            password: 'passw0rd'
+          }
+        }
+      }
 
       it 'returns error messages' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     name: ["can't be blank"]
-                                   }
-                                 )
+        post '/users.json', params: invalid_user_attributes
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          name: ["can't be blank"]
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
     context 'when paramters are empty' do
-      before do
-        post '/users.json', params: {}
-      end
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
-
       it 'returns error messages' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     error: String
-                                   }
-                                 )
+        post '/users.json', params: {}
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          error: String
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
   end
@@ -109,22 +97,20 @@ RSpec.describe 'User API', type: :request do
         }
       }
 
-      it 'returns 200 OK' do
-        patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
-        expect(response.status).to eq 200
-      end
-
       it 'returns the updated user attributes' do
         patch "/users/#{user.id}.json", params: attributes_for_update, headers: authenticated_header
-        expect(response.body).to be_json_as(
-                                   {
-                                     id:   user.id,
-                                     name: attributes_for_update[:user][:name]
-                                   })
+
+        expect(response.status).to eq 200
+
+        expected_json = {
+          id:   user.id,
+          name: attributes_for_update[:user][:name]
+        }
+        expect(response.body).to be_json_as expected_json
       end
 
       context 'when other user sends the request' do
-        let(:other_user) { create(:user) }
+        let(:other_user) { build_stubbed(:user) }
         let(:authenticated_header) { authentication_token_header(other_user) }
 
         it 'returns 401 Unauthorized' do
@@ -143,40 +129,38 @@ RSpec.describe 'User API', type: :request do
     end
 
     context 'when parameters are invalid' do
-      let(:invalid_user_attributes) { { user: { name: '', email: 'foo@example.com', password: 'passw0rd' } } }
-
-      before do
-        patch "/users/#{user.id}.json", params: invalid_user_attributes, headers: authenticated_header
-      end
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
+      let(:invalid_user_attributes) {
+        {
+          user: {
+            name:     '',
+            email:    'foo@example.com',
+            password: 'passw0rd'
+          }
+        }
+      }
 
       it 'returns error messages' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     name: ["can't be blank"]
-                                   }
-                                 )
+        patch "/users/#{user.id}.json", params: invalid_user_attributes, headers: authenticated_header
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          name: ["can't be blank"]
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
     context 'when paramters are empty' do
-      before do
-        patch "/users/#{user.id}.json", params: {}, headers: authenticated_header
-      end
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
-
       it 'returns error messages' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     error: String
-                                   }
-                                 )
+        patch "/users/#{user.id}.json", params: {}, headers: authenticated_header
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          error: String
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
   end
@@ -185,19 +169,16 @@ RSpec.describe 'User API', type: :request do
     include_context 'the user has the authentication token'
 
     context 'when the specified user exists' do
-      it 'returns 204 No Content' do
-        delete "/users/#{user.id}.json", headers: authenticated_header
-        expect(response.status).to eq 204
-      end
-
       it 'destroys the user' do
         expect {
           delete "/users/#{user.id}.json", headers: authenticated_header
         }.to change(User, :count).by(-1)
+
+        expect(response.status).to eq 204
       end
 
       context 'when other user sends the request' do
-        let(:other_user) { create(:user) }
+        let(:other_user) { build_stubbed(:user) }
         let(:authenticated_header) { authentication_token_header(other_user) }
 
         it 'returns 401 Unauthorized' do

@@ -5,25 +5,21 @@ RSpec.describe 'Snippet API', type: :request do
     context 'when the specified snippet exists' do
       let(:snippet) { create(:snippet) }
 
-      before do
-        get "/snippets/#{snippet.id}.json"
-      end
-
-      it 'returns 200 OK' do
-        expect(response.status).to eq 200
-      end
-
       it 'returns the snippet attributes' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     id:      snippet.id,
-                                     title:   snippet.title,
-                                     content: snippet.content,
-                                     author: {
-                                       id:   snippet.author.id,
-                                       name: snippet.author.name
-                                     }
-                                   })
+        get "/snippets/#{snippet.id}.json"
+
+        expect(response.status).to eq 200
+
+        expected_json = {
+          id:      snippet.id,
+          title:   snippet.title,
+          content: snippet.content,
+          author: {
+            id:   snippet.author.id,
+            name: snippet.author.name
+          }
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
@@ -38,23 +34,19 @@ RSpec.describe 'Snippet API', type: :request do
 
   describe 'GET /users/:user_id/snippets.json' do
     context 'when the specified user exists' do
-      let(:user) { create(:user) }
+      let(:user) { build(:user) }
 
       before do
-        create_list(:snippet, 10, author: user)
+        create_pair(:snippet, author: user)
         get "/users/#{user.id}/snippets.json"
       end
 
-      it 'returns 200 OK' do
+      it 'returns an array of snippets where each element has snippet attributes' do
         expect(response.status).to eq 200
-      end
 
-      it 'returns an array including 10 snippets' do
         snippets = JSON.parse(response.body)
-        expect(snippets.size).to eq 10
-      end
+        expect(snippets.size).to eq 2
 
-      it 'returns an array where each element has snippet attributes' do
         expected_json = [
           {
             id:      Numeric,
@@ -64,8 +56,9 @@ RSpec.describe 'Snippet API', type: :request do
               id:   user.id,
               name: user.name
             }
-          }] * 10
-        expect(response.body).to be_json_as(expected_json)
+          }
+        ] * 2
+        expect(response.body).to be_json_as expected_json
       end
     end
 
@@ -79,23 +72,19 @@ RSpec.describe 'Snippet API', type: :request do
   end
 
   describe 'GET /snippets.json' do
-    let(:users) { create_list(:user, 5) }
+    let(:users) { build_pair(:user) }
 
     before do
-      5.times { |n| create_list(:snippet, 10, author: users[n]) }
+      users.size.times { |n| create_pair(:snippet, author: users[n]) }
       get "/snippets.json"
     end
 
-    it 'returns 200 OK' do
+    it 'returns an array of snippets where each element has snippet attributes' do
       expect(response.status).to eq 200
-    end
 
-    it 'returns an array including 50 snippets' do
       snippets = JSON.parse(response.body)
-      expect(snippets.size).to eq 50
-    end
+      expect(snippets.size).to eq 4
 
-    it 'returns an array where each element has snippet attributes' do
       expected_json = [
         {
           id:      Numeric,
@@ -105,8 +94,8 @@ RSpec.describe 'Snippet API', type: :request do
             id:   Numeric,
             name: String
           }
-        }] * 50
-      expect(response.body).to be_json_as(expected_json)
+        }] * 4
+      expect(response.body).to be_json_as expected_json
     end
   end
 
@@ -124,33 +113,27 @@ RSpec.describe 'Snippet API', type: :request do
     include_context 'the user has the authentication token'
 
     context 'when the specified user exists and parameters are valid' do
-      it 'returns 201 Created' do
-        post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
-        expect(response.status).to eq 201
-      end
-
-      it 'creates a snippet' do
+      it 'creates the snippet returns its attributes' do
         expect  {
           post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
-        }.to change(Snippet, :count).by(1)
-      end
+        }.to change(Snippet, :count).by 1
 
-      it 'returns the created snippet attributes' do
-        post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
-        expect(response.body).to be_json_as(
-                                   {
-                                     id:      Numeric,
-                                     title:   snippet_attributes[:title],
-                                     content: snippet_attributes[:content],
-                                     author: {
-                                       id:   user.id,
-                                       name: user.name
-                                     }
-                                   })
+        expect(response.status).to eq 201
+
+        expected_json = {
+          id:      Numeric,
+          title:   snippet_attributes[:title],
+          content: snippet_attributes[:content],
+          author: {
+            id:   user.id,
+            name: user.name
+          }
+        }
+        expect(response.body).to be_json_as expected_json
       end
 
       context 'when other user sends the request' do
-        let(:other_user) { create(:user) }
+        let(:other_user) { build_stubbed(:user) }
         let(:authenticated_header) { authentication_token_header(other_user) }
 
         it 'returns 401 Unauthorized' do
@@ -169,38 +152,28 @@ RSpec.describe 'Snippet API', type: :request do
     end
 
     context 'when parameters are invalid' do
-      before do
-        post "/users/#{user.id}/snippets.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header
-      end
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
-
       it 'returns an error' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     content: ["can't be blank"]
-                                   }
-                                 )
+        post "/users/#{user.id}/snippets.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          content: ["can't be blank"]
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
     context 'when parameters are empty' do
-      before do
-        post "/users/#{user.id}/snippets.json", params: {}, headers: authenticated_header
-      end
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
-
       it 'returns an error' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     error: String
-                                   }
-                                 )
+        post "/users/#{user.id}/snippets.json", params: {}, headers: authenticated_header
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          error: String
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
   end
@@ -210,77 +183,67 @@ RSpec.describe 'Snippet API', type: :request do
 
     let(:snippet) { create(:snippet, author: user) }
     let(:snippet_params) {
-      { snippet:
-          {
-            title: updated_title
-          }
+      {
+        snippet: {
+          title: updated_title
+        }
       }
     }
     let(:updated_title) { 'Updated Title' }
 
     context 'when the specified snippet exists and parameters are valid' do
-      before do
+      it 'updates the snippet and returns its attributes' do
         patch "/snippets/#{snippet.id}.json", params: snippet_params, headers: authenticated_header
-      end
 
-      it 'returns 200 OK' do
         expect(response.status).to eq 200
-      end
 
-      it 'updates the snippet' do
         snippet.reload
         expect(snippet.title).to eq updated_title
-      end
 
-      it 'returns the updated snippet attributes' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     id:      snippet.id,
-                                     title:   updated_title,
-                                     content: snippet.content,
-                                     author:  {
-                                       id:   snippet.author.id,
-                                       name: snippet.author.name
-                                     }
-                                   })
+        expected_json = {
+          id:      snippet.id,
+          title:   updated_title,
+          content: snippet.content,
+          author:  {
+            id:   snippet.author.id,
+            name: snippet.author.name
+          }
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
     context 'when the specified snippet does not exists' do
-      before { patch '/snippets/1.json', params: snippet_params, headers: authenticated_header }
+      before do
+        patch '/snippets/1.json', params: snippet_params, headers: authenticated_header
+      end
 
       include_examples 'The resource is not found'
     end
 
     context 'when parameters are invalid' do
-      before { patch "/snippets/#{snippet.id}.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header }
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
-
       it 'returns an error' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     content: ["can't be blank"]
-                                   }
-                                 )
+        patch "/snippets/#{snippet.id}.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          content: ["can't be blank"]
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
 
     context 'when parameters are empty' do
-      before { patch "/snippets/#{snippet.id}.json", params: {}, headers: authenticated_header }
-
-      it 'returns 400 Bad Request' do
-        expect(response.status).to eq 400
-      end
-
       it 'returns an error' do
-        expect(response.body).to be_json_as(
-                                   {
-                                     error: String
-                                   }
-                                 )
+        patch "/snippets/#{snippet.id}.json", params: {}, headers: authenticated_header
+
+        expect(response.status).to eq 400
+
+        expected_json = {
+          error: String
+        }
+        expect(response.body).to be_json_as expected_json
       end
     end
   end
@@ -291,15 +254,12 @@ RSpec.describe 'Snippet API', type: :request do
     context 'when the specified snippet exists' do
       let!(:snippet) { create(:snippet, author: user) }
 
-      it 'returns 204 No Content' do
-        delete "/snippets/#{snippet.id}.json", headers: authenticated_header
-        expect(response.status).to eq 204
-      end
-
       it 'destroys the snippet' do
         expect {
           delete "/snippets/#{snippet.id}.json", headers: authenticated_header
         }.to change(Snippet, :count).by(-1)
+
+        expect(response.status).to eq 204
       end
     end
 

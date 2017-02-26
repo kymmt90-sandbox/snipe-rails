@@ -6,7 +6,7 @@ FactoryGirl.define do
 
     factory :snippet_with_comments do
       transient do
-        comments_count 5
+        comments_count 2
       end
 
       after(:create) do |snippet, evaluator|
@@ -16,7 +16,7 @@ FactoryGirl.define do
 
     factory :snippet_with_starring_users do
       transient do
-        starring_users_count 5
+        starring_users_count 2
       end
 
       after(:create) do |snippet, evaluator|
