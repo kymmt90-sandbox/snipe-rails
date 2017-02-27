@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'bcrypt', '~> 3.1.7'
+gem 'ffaker'
 gem 'jbuilder', '~> 2.5'
 gem 'knock'
 gem 'puma', '~> 3.0'
@@ -16,7 +17,6 @@ gem 'swagger-blocks'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'factory_girl_rails'
-  gem 'ffaker'
   gem 'rspec-json_matcher'
   gem 'rspec-rails'
   gem 'sqlite3'
