@@ -2,12 +2,12 @@ class ApplicationController < ActionController::API
   include Knock::Authenticable
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    response = {
+    response_body = {
       errors: [
         "#{e.model} not found"
       ]
     }
-    render json: response, status: :not_found
+    render json: response_body, status: :not_found
   end
 
   rescue_from ActionController::ParameterMissing do |e|
