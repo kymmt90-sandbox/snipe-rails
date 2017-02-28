@@ -1,12 +1,15 @@
 RSpec.shared_examples 'The resource is not found' do
-  it 'returns 404 Not Found' do
+  it 'returns an error' do
     expect(response.status).to eq 404
-  end
 
-  it 'returns an error message' do
-    expect(response.body).to be_json_as(
-                               {
-                                 error: String
-                               })
+    expected_json = {
+      errors: [
+        String
+      ]
+    }
+    expect(response.body).to be_json_as expected_json
+
+    json = JSON.parse(response.body)
+    expect(json['errors'].first).to match /not found\Z/
   end
 end
