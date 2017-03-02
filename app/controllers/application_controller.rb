@@ -11,6 +11,11 @@ class ApplicationController < ActionController::API
   end
 
   rescue_from ActionController::ParameterMissing do |e|
-    render json: { error: e.message }, status: :bad_request
+    response_body = {
+      errors: [
+        'Required parameters are missing'
+      ]
+    }
+    render json: response_body, status: :bad_request
   end
 end

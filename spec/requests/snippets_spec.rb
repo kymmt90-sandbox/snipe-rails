@@ -165,16 +165,11 @@ RSpec.describe 'Snippet API', type: :request do
     end
 
     context 'when parameters are empty' do
-      it 'returns an error' do
+      before do
         post "/users/#{user.id}/snippets.json", params: {}, headers: authenticated_header
-
-        expect(response.status).to eq 400
-
-        expected_json = {
-          error: String
-        }
-        expect(response.body).to be_json_as expected_json
       end
+
+      include_examples 'Required parameters are missing'
     end
   end
 
@@ -235,16 +230,11 @@ RSpec.describe 'Snippet API', type: :request do
     end
 
     context 'when parameters are empty' do
-      it 'returns an error' do
+      before do
         patch "/snippets/#{snippet.id}.json", params: {}, headers: authenticated_header
-
-        expect(response.status).to eq 400
-
-        expected_json = {
-          error: String
-        }
-        expect(response.body).to be_json_as expected_json
       end
+
+      include_examples 'Required parameters are missing'
     end
   end
 

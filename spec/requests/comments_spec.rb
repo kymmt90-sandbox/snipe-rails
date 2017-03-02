@@ -146,14 +146,7 @@ RSpec.describe 'Comments API', type: :request do
         post "/snippets/#{snippet.id}/comments.json", params: {}, headers: authenticated_header
       end
 
-      it 'returns errors' do
-        expect(response.status).to eq 400
-
-        expected_json = {
-          error: String
-        }
-        expect(response.body).to be_json_as expected_json
-      end
+      include_examples 'Required parameters are missing'
     end
   end
 
@@ -223,14 +216,7 @@ RSpec.describe 'Comments API', type: :request do
     context 'when parameters are empty' do
       before { patch "/comments/#{comment.id}.json", params: {}, headers: authenticated_header }
 
-      it 'returns errors' do
-        expect(response.status).to eq 400
-
-        expected_json = {
-          error: String
-        }
-        expect(response.body).to be_json_as expected_json
-      end
+      include_examples 'Required parameters are missing'
     end
   end
 
