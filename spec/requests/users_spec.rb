@@ -70,16 +70,11 @@ RSpec.describe 'User API', type: :request do
     end
 
     context 'when paramters are empty' do
-      it 'returns error messages' do
+      before do
         post '/users.json', params: {}
-
-        expect(response.status).to eq 400
-
-        expected_json = {
-          error: String
-        }
-        expect(response.body).to be_json_as expected_json
       end
+
+      include_examples 'Required parameters are missing'
     end
   end
 
@@ -152,16 +147,11 @@ RSpec.describe 'User API', type: :request do
     end
 
     context 'when paramters are empty' do
-      it 'returns error messages' do
+      before do
         patch "/users/#{user.id}.json", params: {}, headers: authenticated_header
-
-        expect(response.status).to eq 400
-
-        expected_json = {
-          error: String
-        }
-        expect(response.body).to be_json_as expected_json
       end
+
+      include_examples 'Required parameters are missing'
     end
   end
 
