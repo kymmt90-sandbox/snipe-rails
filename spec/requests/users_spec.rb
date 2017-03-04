@@ -63,7 +63,7 @@ RSpec.describe 'User API', type: :request do
         expect(response.status).to eq 400
 
         expected_json = {
-          name: ["can't be blank"]
+          errors: ["name can't be blank"]
         }
         expect(response.body).to be_json_as expected_json
       end
@@ -140,7 +140,7 @@ RSpec.describe 'User API', type: :request do
         expect(response.status).to eq 400
 
         expected_json = {
-          name: ["can't be blank"]
+          errors: ["name can't be blank"]
         }
         expect(response.body).to be_json_as expected_json
       end

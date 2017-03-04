@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     if @user.save
       render status: :created
     else
-      render json: @user.errors, status: :bad_request
+      render json: validation_errors(@user), status: :bad_request
     end
   end
 
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     if @user.update_attributes(user_params)
       render status: :ok
     else
-      render json: @user.errors, status: :bad_request
+      render json: validation_errors(@user), status: :bad_request
     end
   end
 
