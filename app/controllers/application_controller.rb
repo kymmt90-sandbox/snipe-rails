@@ -18,4 +18,14 @@ class ApplicationController < ActionController::API
     }
     render json: response_body, status: :bad_request
   end
+
+  def validation_errors(model)
+    response = { errors: [] }
+    model.errors.messages.each do |attribute, details|
+      details.each do |detail|
+        response[:errors] << "#{attribute} #{detail}"
+      end
+    end
+    response
+  end
 end

@@ -135,7 +135,7 @@ RSpec.describe 'Comments API', type: :request do
         expect(response.status).to eq 400
 
         expected_json = {
-          content: ["can't be blank"]
+          errors: ["content can't be blank"]
         }
         expect(response.body).to be_json_as expected_json
       end
@@ -207,7 +207,7 @@ RSpec.describe 'Comments API', type: :request do
         expect(response.status).to eq 400
 
         expected_json = {
-          content: ["can't be blank"]
+          errors: ["content can't be blank"]
         }
         expect(response.body).to be_json_as expected_json
       end

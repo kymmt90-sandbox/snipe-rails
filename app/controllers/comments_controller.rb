@@ -20,7 +20,7 @@ class CommentsController < ApplicationController
     if @comment.save
       render status: :created
     else
-      render json: @comment.errors, status: :bad_request
+      render json: validation_errors(@comment), status: :bad_request
     end
   end
 
@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
     if @comment.update_attributes(comment_params)
       render status: :ok
     else
-      render json: @comment.errors, status: :bad_request
+      render json: validation_errors(@comment), status: :bad_request
     end
   end
 

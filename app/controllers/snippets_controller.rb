@@ -26,7 +26,7 @@ class SnippetsController < ApplicationController
     if @snippet.save
       render status: :created
     else
-      render json: @snippet.errors, status: :bad_request
+      render json: validation_errors(@snippet), status: :bad_request
     end
   end
 
@@ -36,7 +36,7 @@ class SnippetsController < ApplicationController
     if @snippet.update_attributes(snippet_params)
       render status: :ok
     else
-      render json: @snippet.errors, status: :bad_request
+      render json: validation_errors(@snippet), status: :bad_request
     end
   end
 
