@@ -2,6 +2,7 @@ class ApplicationController < ActionController::API
   include Knock::Authenticable
 
   rescue_from Exception do |e|
+    log_error_backtrace(e)
     head :internal_server_error
   end
 
@@ -31,5 +32,14 @@ class ApplicationController < ActionController::API
       end
     end
     response
+  end
+
+  private
+
+  def log_error_backtrace(e)
+    Rails.logger.error(e)
+    e.backtrace.each do |line|
+      Rails.logger.error(line)
+    end
   end
 end
