@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   include Knock::Authenticable
 
+  rescue_from Exception do |e|
+    head :internal_server_error
+  end
+
   rescue_from ActiveRecord::RecordNotFound do |e|
     response_body = {
       errors: [
