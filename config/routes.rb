@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   end
   resources :snippets, only: [:index]
   get 'api-docs', to: 'apidocs#index'
+  match '*path', to: 'application#not_found', via: :all
 end
