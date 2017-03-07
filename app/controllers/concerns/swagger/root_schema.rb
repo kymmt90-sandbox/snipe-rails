@@ -27,6 +27,43 @@ module Swagger::RootSchema
       end
     end
 
+    swagger_path '/user_token' do
+      operation :post do
+        key :description, 'Create JWT'
+        key :operationId, 'createJwt'
+
+        parameter do
+          key :name, :auth
+          key :in, :body
+          key :description, 'Authentication information'
+          key :required, true
+          schema do
+            key :type, :object
+            property :auth do
+              key :required, [:email, :password]
+              property :email do
+                key :type, :string
+              end
+              property :password do
+                key :type, :string
+                key :format, :password
+              end
+            end
+          end
+        end
+
+        response 201 do
+          key :description, 'JWT'
+          schema do
+            key :required, [:jwt]
+            property :jwt do
+              key :type, :string
+            end
+          end
+        end
+      end
+    end
+
     SWAGGERED_CLASSES = [
       User,
       UsersController,
