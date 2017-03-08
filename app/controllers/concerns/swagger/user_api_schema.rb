@@ -3,6 +3,7 @@ module Swagger::UserApiSchema
 
   included do
     include Swagger::Blocks
+    include Swagger::ErrorSchema
 
     swagger_path '/users' do
       operation :post do
@@ -23,6 +24,20 @@ module Swagger::UserApiSchema
           key :description, 'user response'
           schema do
             key :'$ref', :UserOutput
+          end
+        end
+
+        response 400 do
+          key :description, 'parameters are invalid'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
           end
         end
       end
@@ -46,6 +61,20 @@ module Swagger::UserApiSchema
           key :description, 'user response'
           schema do
             key :'$ref', :UserOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'user not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
           end
         end
       end
@@ -80,6 +109,34 @@ module Swagger::UserApiSchema
           end
         end
 
+        response 400 do
+          key :description, 'parameters are invalid'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'user not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
         security api_key: []
       end
 
@@ -98,6 +155,20 @@ module Swagger::UserApiSchema
 
         response 204 do
           key :description, 'no content'
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'user not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
         end
 
         security api_key: []
