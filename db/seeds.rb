@@ -1,7 +1,7 @@
 require 'ffaker'
 
 10.times do
-  password = FFaker::Internet.password
+  password = 'passw0rd'
   User.create(
     name:     FFaker::Name.name,
     email:    FFaker::Internet.email,
