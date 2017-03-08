@@ -21,7 +21,8 @@ module Swagger::RootSchema
       key :consumes, ['application/json']
       key :produces, ['application/json']
 
-      security_definition :api_key, type: :apiKey do
+      security_definition :api_key do
+        key :type, :apiKey
         key :name, 'Authorization'
         key :in, :header
       end
