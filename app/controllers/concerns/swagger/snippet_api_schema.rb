@@ -24,6 +24,20 @@ module Swagger::SnippetApiSchema
             key :'$ref', :SnippetOutput
           end
         end
+
+        response 404 do
+          key :description, 'snippet not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
       end
 
       operation :patch do
@@ -47,6 +61,34 @@ module Swagger::SnippetApiSchema
           end
         end
 
+        response 400 do
+          key :description, 'invalid parameters'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'snippet not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
         security api_key: []
       end
 
@@ -56,6 +98,27 @@ module Swagger::SnippetApiSchema
 
         response 204 do
           key :description, 'No content'
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'snippet not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
         end
 
         security api_key: []
@@ -84,6 +147,20 @@ module Swagger::SnippetApiSchema
             end
           end
         end
+
+        response 404 do
+          key :description, 'user not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
       end
 
       operation :post do
@@ -93,7 +170,7 @@ module Swagger::SnippetApiSchema
         parameter do
           key :name, :snippet
           key :in, :body
-          key :description, 'The created nippet'
+          key :description, 'The created snippet'
           key :required, true
           schema do
             key :'$ref', :SnippetInput
@@ -104,6 +181,34 @@ module Swagger::SnippetApiSchema
           key :description, 'The created snippet'
           schema do
             key :'$ref', :SnippetOutput
+          end
+        end
+
+        response 400 do
+          key :description, 'invalid parameters'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'user not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
           end
         end
 
@@ -122,6 +227,13 @@ module Swagger::SnippetApiSchema
             items do
               key :'$ref', :SnippetOutput
             end
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
           end
         end
       end
