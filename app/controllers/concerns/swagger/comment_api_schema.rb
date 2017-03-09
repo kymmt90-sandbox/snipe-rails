@@ -26,6 +26,20 @@ module Swagger::CommentApiSchema
             end
           end
         end
+
+        response 404 do
+          key :description, 'snippet not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
       end
 
       operation :post do
@@ -46,6 +60,34 @@ module Swagger::CommentApiSchema
           key :description, 'The created comment response'
           schema do
             key :'$ref', :CommentOutput
+          end
+        end
+
+        response 400 do
+          key :description, 'invalid parameters'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'snippet not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
           end
         end
 
@@ -73,6 +115,20 @@ module Swagger::CommentApiSchema
             key :'$ref', :CommentOutput
           end
         end
+
+        response 404 do
+          key :description, 'comment not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
       end
 
       operation :patch do
@@ -96,6 +152,34 @@ module Swagger::CommentApiSchema
           end
         end
 
+        response 400 do
+          key :description, 'invalid parameters'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'comment not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
         security api_key: []
       end
 
@@ -105,6 +189,27 @@ module Swagger::CommentApiSchema
 
         response 204 do
           key :description, 'No content'
+        end
+
+        response 401 do
+          key :description, 'unauthorized user'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response 404 do
+          key :description, 'comment not found'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
+        end
+
+        response :default do
+          key :description, 'unexpected error'
+          schema do
+            key :'$ref', :ErrorOutput
+          end
         end
 
         security api_key: []
