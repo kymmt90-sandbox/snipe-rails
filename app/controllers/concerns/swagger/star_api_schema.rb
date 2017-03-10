@@ -5,17 +5,13 @@ module Swagger::StarApiSchema
     include Swagger::Blocks
 
     swagger_path '/snippets/{snippet_id}/star' do
-      parameter do
+      parameter :snippet_id do
         key :name, :snippet_id
-        key :in, :path
-        key :description, 'Snippet ID'
-        key :required, true
-        key :type, :integer
-        key :format, :int64
       end
 
       operation :get do
         key :description, 'Check the snippet is starred'
+        key :operationId, :check_snippet_starred
 
         response 204 do
           key :description, 'The snippet is starred when the API returns no content'
@@ -47,6 +43,7 @@ module Swagger::StarApiSchema
 
       operation :put do
         key :description, 'Star the snippet'
+        key :operationId, :star_snippet
 
         response 204 do
           key :description, 'The snippet has been starred when the API returns no content'
@@ -71,6 +68,7 @@ module Swagger::StarApiSchema
 
       operation :delete do
         key :description, 'Unstar the snippet'
+        key :operationId, :unstar_snippet
 
         response 204 do
           key :description, 'The snippet has been unstarred when the API returns no content'
