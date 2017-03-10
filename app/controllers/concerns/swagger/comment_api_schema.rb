@@ -5,18 +5,13 @@ module Swagger::CommentApiSchema
     include Swagger::Blocks
 
     swagger_path '/snippets/{snippet_id}/comments' do
-      parameter do
+      parameter :snippet_id do
         key :name, :snippet_id
-        key :in, :path
-        key :description, 'Snippet ID'
-        key :required, true
-        key :type, :integer
-        key :format, :int64
       end
 
       operation :get do
         key :description, 'Returns comments of the snippet'
-        key :operationId, 'findComments'
+        key :operationId, :find_comments_by_snippet_id
 
         response 200 do
           key :description, 'The comments response'
@@ -44,17 +39,9 @@ module Swagger::CommentApiSchema
 
       operation :post do
         key :description, 'Creates a comment'
-        key :operationId, 'createSnippet'
+        key :operationId, :create_snippet
 
-        parameter do
-          key :name, :comment
-          key :in, :body
-          key :description, 'The created comment'
-          key :required, true
-          schema do
-            key :'$ref', :CommentInput
-          end
-        end
+        parameter :comment
 
         response 201 do
           key :description, 'The created comment response'
@@ -96,18 +83,13 @@ module Swagger::CommentApiSchema
     end
 
     swagger_path '/comments/{id}' do
-      parameter do
+      parameter :comment_id do
         key :name, :id
-        key :in, :path
-        key :description, 'Comment ID'
-        key :required, true
-        key :type, :integer
-        key :format, :int64
       end
 
       operation :get do
-        key :description, "Returns a comment"
-        key :operationId, 'findCommentById'
+        key :description, "Returns the specified comment"
+        key :operationId, :find_comment_by_id
 
         response 200 do
           key :description, 'The comment response'
@@ -132,18 +114,10 @@ module Swagger::CommentApiSchema
       end
 
       operation :patch do
-        key :description, 'Updates a comment'
-        key :operationId, 'updateSnippet'
+        key :description, 'Updates the comment'
+        key :operationId, :update_comment
 
-        parameter do
-          key :name, :comment
-          key :in, :body
-          key :description, 'The updated comment'
-          key :required, true
-          schema do
-            key :'$ref', :CommentInput
-          end
-        end
+        parameter :comment
 
         response 201 do
           key :description, 'The updated comment response'
@@ -184,8 +158,8 @@ module Swagger::CommentApiSchema
       end
 
       operation :delete do
-        key :description, 'Deletes a comment'
-        key :operationId, 'deleteComment'
+        key :description, 'Deletes the comment'
+        key :operationId, :delete_comment
 
         response 204 do
           key :description, 'No content'

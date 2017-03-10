@@ -5,7 +5,9 @@ module Swagger::SnippetApiSchema
     include Swagger::Blocks
 
     swagger_path '/snippets/{id}' do
-      parameter :snippet_id
+      parameter :snippet_id do
+        key :name, :id
+      end
 
       operation :get do
         key :description, 'Returns the specified snippet'

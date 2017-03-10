@@ -20,7 +20,6 @@ module Swagger::Parameters
     end
 
     base.parameter :snippet_id do
-      key :name, :id
       key :in, :path
       key :description, 'Snippet ID'
       key :required, true
@@ -35,6 +34,24 @@ module Swagger::Parameters
       key :required, true
       schema do
         key :'$ref', :Snippet
+      end
+    end
+
+    base.parameter :comment_id do
+      key :in, :path
+      key :description, 'Comment ID'
+      key :required, true
+      key :type, :integer
+      key :format, :int64
+    end
+
+    base.parameter :comment do
+      key :name, :comment
+      key :in, :body
+      key :description, 'Comment attributes'
+      key :required, true
+      schema do
+        key :'$ref', :CommentInput
       end
     end
   end
