@@ -26,6 +26,8 @@ module Swagger::RootSchema
         key :name, 'Authorization'
         key :in, :header
       end
+
+      extend Swagger::Parameters
     end
 
     swagger_path '/user_token' do
