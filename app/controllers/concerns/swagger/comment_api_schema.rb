@@ -39,7 +39,7 @@ module Swagger::CommentApiSchema
 
       operation :post do
         key :description, 'Creates a comment'
-        key :operationId, :create_snippet
+        key :operationId, :create_comment
 
         parameter :comment
 
