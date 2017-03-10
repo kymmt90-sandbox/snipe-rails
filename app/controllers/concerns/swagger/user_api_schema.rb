@@ -36,11 +36,13 @@ module Swagger::UserApiSchema
     end
 
     swagger_path '/users/{id}' do
+      parameter :user_id do
+        key :name, :id
+      end
+
       operation :get do
         key :description, 'Returns the specified user'
         key :operationId, :find_user_by_id
-
-        parameter :user_id
 
         response 200 do
           key :description, 'user response'
@@ -68,7 +70,6 @@ module Swagger::UserApiSchema
         key :description, 'Updates the user'
         key :operationId, :update_user
 
-        parameter :user_id
         parameter :user
 
         response 200 do
@@ -112,8 +113,6 @@ module Swagger::UserApiSchema
       operation :delete do
         key :description, 'Deletes the user'
         key :operationId, :delete_user
-
-        parameter :user_id
 
         response 204 do
           key :description, 'no content'

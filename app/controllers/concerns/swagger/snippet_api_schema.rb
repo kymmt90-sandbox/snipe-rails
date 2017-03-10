@@ -113,7 +113,9 @@ module Swagger::SnippetApiSchema
     end
 
     swagger_path '/users/{user_id}/snippets' do
-      parameter :user_id
+      parameter :user_id do
+        key :name, :user_id
+      end
 
       operation :get do
         key :description, "Returns the specified user's snippets"
