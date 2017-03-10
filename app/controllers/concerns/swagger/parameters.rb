@@ -3,7 +3,7 @@ module Swagger::Parameters
     base.parameter :credential do
       key :name, :credential
       key :in, :body
-      key :description, 'The credential for user authentication'
+      key :description, 'Credential for user authentication'
       key :required, true
       schema do
         key :type, :object
