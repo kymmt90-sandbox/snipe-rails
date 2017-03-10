@@ -26,32 +26,16 @@ module Swagger::RootSchema
         key :name, 'Authorization'
         key :in, :header
       end
+
+      extend Swagger::Parameters
     end
 
     swagger_path '/user_token' do
       operation :post do
         key :description, 'Create JWT'
-        key :operationId, 'createJwt'
+        key :operationId, 'create_jwt'
 
-        parameter do
-          key :name, :auth
-          key :in, :body
-          key :description, 'Authentication information'
-          key :required, true
-          schema do
-            key :type, :object
-            property :auth do
-              key :required, [:email, :password]
-              property :email do
-                key :type, :string
-              end
-              property :password do
-                key :type, :string
-                key :format, :password
-              end
-            end
-          end
-        end
+        parameter :credential
 
         response 201 do
           key :description, 'JWT'
