@@ -12,10 +12,29 @@ module Swagger::Parameters
     base.parameter :user do
       key :name, :user
       key :in, :body
-      key :description, 'The user to create'
+      key :description, 'User attributes'
       key :required, true
       schema do
         key :'$ref', :UserInput
+      end
+    end
+
+    base.parameter :snippet_id do
+      key :name, :id
+      key :in, :path
+      key :description, 'Snippet ID'
+      key :required, true
+      key :type, :integer
+      key :format, :int64
+    end
+
+    base.parameter :snippet do
+      key :name, :snippet
+      key :in, :body
+      key :description, 'Snippet attributes'
+      key :required, true
+      schema do
+        key :'$ref', :Snippet
       end
     end
   end

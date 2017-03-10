@@ -5,18 +5,11 @@ module Swagger::SnippetApiSchema
     include Swagger::Blocks
 
     swagger_path '/snippets/{id}' do
-      parameter do
-        key :name, :id
-        key :in, :path
-        key :description, 'Snippet ID'
-        key :required, true
-        key :type, :integer
-        key :format, :int64
-      end
+      parameter :snippet_id
 
       operation :get do
-        key :description, 'Returns a snippet'
-        key :operationId, 'findSnippetById'
+        key :description, 'Returns the specified snippet'
+        key :operationId, :find_snippet_by_id
 
         response 200 do
           key :description, 'The snippet response'
@@ -41,18 +34,10 @@ module Swagger::SnippetApiSchema
       end
 
       operation :patch do
-        key :description, 'Updates a snippet'
-        key :operationId, 'updateSnippet'
+        key :description, 'Updates the snippet'
+        key :operationId, :update_snippet
 
-        parameter do
-          key :name, :snippet
-          key :in, :body
-          key :description, 'The updated snippet'
-          key :required, true
-          schema do
-            key :'$ref', :Snippet
-          end
-        end
+        parameter :snippet
 
         response 200 do
           key :description, 'The updated snippet response'
@@ -93,8 +78,8 @@ module Swagger::SnippetApiSchema
       end
 
       operation :delete do
-        key :description, 'Deletes a snippet'
-        key :operationId, 'deleteSnippet'
+        key :description, 'Deletes the snippet'
+        key :operationId, :delete_snippet
 
         response 204 do
           key :description, 'No content'
@@ -126,18 +111,11 @@ module Swagger::SnippetApiSchema
     end
 
     swagger_path '/users/{user_id}/snippets' do
-      parameter do
-        key :name, :user_id
-        key :in, :path
-        key :description, 'User ID'
-        key :required, true
-        key :type, :integer
-        key :format, :int64
-      end
+      parameter :user_id
 
       operation :get do
-        key :description, "Returns a specified user's snippets"
-        key :operationId, 'findSnippetsByUserId'
+        key :description, "Returns the specified user's snippets"
+        key :operationId, :find_snippets_by_user_id
 
         response 200 do
           key :description, 'The snippets response'
@@ -164,18 +142,10 @@ module Swagger::SnippetApiSchema
       end
 
       operation :post do
-        key :description, "Creates a specified user's snippet"
-        key :operationId, 'createSnippet'
+        key :description, "Creates the specified user's snippet"
+        key :operationId, :create_snippet
 
-        parameter do
-          key :name, :snippet
-          key :in, :body
-          key :description, 'The created snippet'
-          key :required, true
-          schema do
-            key :'$ref', :SnippetInput
-          end
-        end
+        parameter :snippet
 
         response 201 do
           key :description, 'The created snippet'
@@ -218,8 +188,8 @@ module Swagger::SnippetApiSchema
 
     swagger_path '/snippets' do
       operation :get do
-        key :description, "Returns snippets"
-        key :operationId, 'findSnippets'
+        key :description, 'Returns all snippets'
+        key :operationId, :get_all_snippets
 
         response 200 do
           key :description, 'The snippets response'
