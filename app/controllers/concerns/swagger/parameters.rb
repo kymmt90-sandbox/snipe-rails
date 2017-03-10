@@ -1,5 +1,25 @@
 module Swagger::Parameters
   def self.extended(base)
+    base.parameter :credential do
+      key :name, :credential
+      key :in, :body
+      key :description, 'The credential for user authentication'
+      key :required, true
+      schema do
+        key :type, :object
+        property :auth do
+          key :required, [:email, :password]
+          property :email do
+            key :type, :string
+          end
+          property :password do
+            key :type, :string
+            key :format, :password
+          end
+        end
+      end
+    end
+
     base.parameter :user_id do
       key :in, :path
       key :description, 'User ID'
