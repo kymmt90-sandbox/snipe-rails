@@ -14,25 +14,14 @@ module Swagger::SnippetApiSchema
         key :operationId, :find_snippet_by_id
 
         response 200 do
-          key :description, 'The snippet response'
+          key :description, 'Snippet specified by its ID'
           schema do
             key :'$ref', :SnippetOutput
           end
         end
 
-        response 404 do
-          key :description, 'snippet not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
       end
 
       operation :patch do
@@ -42,39 +31,16 @@ module Swagger::SnippetApiSchema
         parameter :snippet
 
         response 200 do
-          key :description, 'The updated snippet response'
+          key :description, 'Updated snippet'
           schema do
             key :'$ref', :SnippetOutput
           end
         end
 
-        response 400 do
-          key :description, 'invalid parameters'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'snippet not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::InvalidParameterError
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_key: []
       end
@@ -84,29 +50,12 @@ module Swagger::SnippetApiSchema
         key :operationId, :delete_snippet
 
         response 204 do
-          key :description, 'No content'
+          key :description, 'The snippet was deleted'
         end
 
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'snippet not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_key: []
       end
@@ -122,7 +71,7 @@ module Swagger::SnippetApiSchema
         key :operationId, :find_snippets_by_user_id
 
         response 200 do
-          key :description, 'The snippets response'
+          key :description, 'Snippets of the user specified by its ID'
           schema type: :array do
             items do
               key :'$ref', :SnippetOutput
@@ -130,19 +79,8 @@ module Swagger::SnippetApiSchema
           end
         end
 
-        response 404 do
-          key :description, 'user not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
       end
 
       operation :post do
@@ -152,39 +90,16 @@ module Swagger::SnippetApiSchema
         parameter :snippet
 
         response 201 do
-          key :description, 'The created snippet'
+          key :description, 'Created snippet'
           schema do
             key :'$ref', :SnippetOutput
           end
         end
 
-        response 400 do
-          key :description, 'invalid parameters'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'user not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::InvalidParameterError
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_key: []
       end
@@ -196,7 +111,7 @@ module Swagger::SnippetApiSchema
         key :operationId, :get_all_snippets
 
         response 200 do
-          key :description, 'The snippets response'
+          key :description, 'All snippets'
           schema type: :array do
             items do
               key :'$ref', :SnippetOutput
@@ -204,12 +119,7 @@ module Swagger::SnippetApiSchema
           end
         end
 
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnexpectedError
       end
     end
   end
