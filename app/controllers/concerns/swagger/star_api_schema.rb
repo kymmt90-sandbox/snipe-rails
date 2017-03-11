@@ -10,33 +10,22 @@ module Swagger::StarApiSchema
       end
 
       operation :get do
-        key :description, 'Check the snippet is starred'
+        key :description, 'Check whether the authorized user starred the snippet or not'
         key :operationId, :check_snippet_starred
 
         response 204 do
-          key :description, 'The snippet is starred when the API returns no content'
-        end
-
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
+          key :description, 'The snippet is starred'
         end
 
         response 404 do
-          key :description, 'The snippet is **not** starred when the API returns no content / snippet not found'
+          key :description, 'The snippet is **not** starred when the response body is empty, otherwise resource was not found'
           schema do
             key :'$ref', :ErrorOutput
           end
         end
 
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_token: []
       end
@@ -46,22 +35,11 @@ module Swagger::StarApiSchema
         key :operationId, :star_snippet
 
         response 204 do
-          key :description, 'The snippet has been starred when the API returns no content'
+          key :description, 'The snippet has been starred'
         end
 
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_token: []
       end
@@ -71,22 +49,11 @@ module Swagger::StarApiSchema
         key :operationId, :unstar_snippet
 
         response 204 do
-          key :description, 'The snippet has been unstarred when the API returns no content'
+          key :description, 'The snippet has been unstarred'
         end
 
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_token: []
       end
