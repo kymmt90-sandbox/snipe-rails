@@ -13,7 +13,7 @@ module Swagger::UserApiSchema
         parameter :user
 
         response 201 do
-          key :description, 'user response'
+          key :description, 'Created user'
           schema do
             key :'$ref', :UserOutput
           end
@@ -30,7 +30,7 @@ module Swagger::UserApiSchema
       end
 
       operation :get do
-        key :description, 'Returns the specified user'
+        key :description, 'Finds the specified user'
         key :operationId, :find_user_by_id
 
         response 200 do
@@ -52,7 +52,7 @@ module Swagger::UserApiSchema
         parameter :user
 
         response 200 do
-          key :description, 'user response'
+          key :description, 'Updated user'
           schema do
             key :'$ref', :UserOutput
           end
@@ -70,7 +70,7 @@ module Swagger::UserApiSchema
         key :operationId, :delete_user
 
         response 204 do
-          key :description, 'The user is deleted'
+          key :description, 'The user was deleted'
         end
 
         extend Swagger::ErrorResponses::UnauthorizedError
