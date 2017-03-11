@@ -14,7 +14,7 @@ module Swagger::CommentApiSchema
         key :operationId, :find_comments_by_snippet_id
 
         response 200 do
-          key :description, 'The comments response'
+          key :description, 'Comments of the snippet specified by its ID'
           schema type: :array do
             items do
               key :'$ref', :CommentOutput
@@ -22,19 +22,8 @@ module Swagger::CommentApiSchema
           end
         end
 
-        response 404 do
-          key :description, 'snippet not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
       end
 
       operation :post do
@@ -44,39 +33,16 @@ module Swagger::CommentApiSchema
         parameter :comment
 
         response 201 do
-          key :description, 'The created comment response'
+          key :description, 'Created comment'
           schema do
             key :'$ref', :CommentOutput
           end
         end
 
-        response 400 do
-          key :description, 'invalid parameters'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'snippet not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::InvalidParameterError
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_key: []
       end
@@ -92,25 +58,14 @@ module Swagger::CommentApiSchema
         key :operationId, :find_comment_by_id
 
         response 200 do
-          key :description, 'The comment response'
+          key :description, 'Comment specified by its ID'
           schema do
             key :'$ref', :CommentOutput
           end
         end
 
-        response 404 do
-          key :description, 'comment not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
       end
 
       operation :patch do
@@ -120,39 +75,16 @@ module Swagger::CommentApiSchema
         parameter :comment
 
         response 201 do
-          key :description, 'The updated comment response'
+          key :description, 'Updated comment'
           schema do
             key :'$ref', :CommentOutput
           end
         end
 
-        response 400 do
-          key :description, 'invalid parameters'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'comment not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::InvalidParameterError
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_key: []
       end
@@ -162,29 +94,12 @@ module Swagger::CommentApiSchema
         key :operationId, :delete_comment
 
         response 204 do
-          key :description, 'No content'
+          key :description, 'The comment was deleted'
         end
 
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'comment not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_key: []
       end

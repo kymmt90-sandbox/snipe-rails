@@ -13,25 +13,14 @@ module Swagger::UserApiSchema
         parameter :user
 
         response 201 do
-          key :description, 'user response'
+          key :description, 'Created user'
           schema do
             key :'$ref', :UserOutput
           end
         end
 
-        response 400 do
-          key :description, 'parameters are invalid'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::InvalidParameterError
+        extend Swagger::ErrorResponses::UnexpectedError
       end
     end
 
@@ -41,29 +30,19 @@ module Swagger::UserApiSchema
       end
 
       operation :get do
-        key :description, 'Returns the specified user'
+        key :description, 'Finds the specified user'
         key :operationId, :find_user_by_id
 
         response 200 do
-          key :description, 'user response'
+          key :description, 'User specified by its ID'
           schema do
             key :'$ref', :UserOutput
           end
         end
 
-        response 404 do
-          key :description, 'user not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
       end
 
       operation :patch do
@@ -73,39 +52,15 @@ module Swagger::UserApiSchema
         parameter :user
 
         response 200 do
-          key :description, 'user response'
+          key :description, 'Updated user'
           schema do
             key :'$ref', :UserOutput
           end
         end
 
-        response 400 do
-          key :description, 'parameters are invalid'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'user not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::InvalidParameterError
+        extend Swagger::ErrorResponses::NotFoundError
+        extend Swagger::ErrorResponses::UnexpectedError
 
         security api_key: []
       end
@@ -115,22 +70,11 @@ module Swagger::UserApiSchema
         key :operationId, :delete_user
 
         response 204 do
-          key :description, 'no content'
+          key :description, 'The user was deleted'
         end
 
-        response 401 do
-          key :description, 'unauthorized user'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
-
-        response 404 do
-          key :description, 'user not found'
-          schema do
-            key :'$ref', :ErrorOutput
-          end
-        end
+        extend Swagger::ErrorResponses::UnauthorizedError
+        extend Swagger::ErrorResponses::NotFoundError
 
         security api_key: []
       end
