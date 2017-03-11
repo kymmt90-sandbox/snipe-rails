@@ -1,0 +1,936 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Snipe",
+    "description": "A Gist clone",
+    "contact": {
+      "name": "@kymmt90"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "basePath": "/",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "parameters": {
+    "credential": {
+      "name": "credential",
+      "in": "body",
+      "description": "Credential for user authentication",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "auth": {
+            "required": [
+              "email",
+              "password"
+            ],
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string",
+                "format": "password"
+              }
+            }
+          }
+        }
+      }
+    },
+    "user_id": {
+      "in": "path",
+      "description": "User ID",
+      "required": true,
+      "type": "integer",
+      "format": "int64"
+    },
+    "user": {
+      "name": "user",
+      "in": "body",
+      "description": "User attributes",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/UserInput"
+      }
+    },
+    "snippet_id": {
+      "in": "path",
+      "description": "Snippet ID",
+      "required": true,
+      "type": "integer",
+      "format": "int64"
+    },
+    "snippet": {
+      "name": "snippet",
+      "in": "body",
+      "description": "Snippet attributes",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Snippet"
+      }
+    },
+    "comment_id": {
+      "in": "path",
+      "description": "Comment ID",
+      "required": true,
+      "type": "integer",
+      "format": "int64"
+    },
+    "comment": {
+      "name": "comment",
+      "in": "body",
+      "description": "Comment attributes",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/CommentInput"
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "description": "Creates a user",
+        "operationId": "create_user",
+        "parameters": [
+          {
+            "$ref": "#/parameters/user"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created user",
+            "schema": {
+              "$ref": "#/definitions/UserOutput"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/user_id",
+          "name": "id"
+        }
+      ],
+      "get": {
+        "description": "Finds the specified user",
+        "operationId": "find_user_by_id",
+        "responses": {
+          "200": {
+            "description": "User specified by its ID",
+            "schema": {
+              "$ref": "#/definitions/UserOutput"
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the user",
+        "operationId": "update_user",
+        "parameters": [
+          {
+            "$ref": "#/parameters/user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated user",
+            "schema": {
+              "$ref": "#/definitions/UserOutput"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Deletes the user",
+        "operationId": "delete_user",
+        "responses": {
+          "204": {
+            "description": "The user was deleted"
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/snippets/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/snippet_id",
+          "name": "id"
+        }
+      ],
+      "get": {
+        "description": "Returns the specified snippet",
+        "operationId": "find_snippet_by_id",
+        "responses": {
+          "200": {
+            "description": "Snippet specified by its ID",
+            "schema": {
+              "$ref": "#/definitions/SnippetOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the snippet",
+        "operationId": "update_snippet",
+        "parameters": [
+          {
+            "$ref": "#/parameters/snippet"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated snippet",
+            "schema": {
+              "$ref": "#/definitions/SnippetOutput"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Deletes the snippet",
+        "operationId": "delete_snippet",
+        "responses": {
+          "204": {
+            "description": "The snippet was deleted"
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/users/{user_id}/snippets": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/user_id",
+          "name": "user_id"
+        }
+      ],
+      "get": {
+        "description": "Returns the specified user's snippets",
+        "operationId": "find_snippets_by_user_id",
+        "responses": {
+          "200": {
+            "description": "Snippets of the user specified by its ID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SnippetOutput"
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates the specified user's snippet",
+        "operationId": "create_snippet",
+        "parameters": [
+          {
+            "$ref": "#/parameters/snippet"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created snippet",
+            "schema": {
+              "$ref": "#/definitions/SnippetOutput"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/snippets": {
+      "get": {
+        "description": "Returns all snippets",
+        "operationId": "get_all_snippets",
+        "responses": {
+          "200": {
+            "description": "All snippets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SnippetOutput"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        }
+      }
+    },
+    "/snippets/{snippet_id}/comments": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/snippet_id",
+          "name": "snippet_id"
+        }
+      ],
+      "get": {
+        "description": "Returns comments of the snippet",
+        "operationId": "find_comments_by_snippet_id",
+        "responses": {
+          "200": {
+            "description": "Comments of the snippet specified by its ID",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CommentOutput"
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a comment",
+        "operationId": "create_comment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/comment"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created comment",
+            "schema": {
+              "$ref": "#/definitions/CommentOutput"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/comments/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/comment_id",
+          "name": "id"
+        }
+      ],
+      "get": {
+        "description": "Returns the specified comment",
+        "operationId": "find_comment_by_id",
+        "responses": {
+          "200": {
+            "description": "Comment specified by its ID",
+            "schema": {
+              "$ref": "#/definitions/CommentOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates the comment",
+        "operationId": "update_comment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/comment"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Updated comment",
+            "schema": {
+              "$ref": "#/definitions/CommentOutput"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Deletes the comment",
+        "operationId": "delete_comment",
+        "responses": {
+          "204": {
+            "description": "The comment was deleted"
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/snippets/{snippet_id}/star": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/snippet_id",
+          "name": "snippet_id"
+        }
+      ],
+      "get": {
+        "description": "Check whether the authorized user starred the snippet or not",
+        "operationId": "check_snippet_starred",
+        "responses": {
+          "204": {
+            "description": "The snippet is starred"
+          },
+          "404": {
+            "description": "The snippet is **not** starred when the response body is empty, otherwise resource was not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      },
+      "put": {
+        "description": "Star the snippet",
+        "operationId": "star_snippet",
+        "responses": {
+          "204": {
+            "description": "The snippet has been starred"
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Unstar the snippet",
+        "operationId": "unstar_snippet",
+        "responses": {
+          "204": {
+            "description": "The snippet has been unstarred"
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorOutput"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      }
+    },
+    "/user_token": {
+      "post": {
+        "description": "Create JWT",
+        "operationId": "create_jwt",
+        "parameters": [
+          {
+            "$ref": "#/parameters/credential"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "JWT",
+            "schema": {
+              "required": [
+                "jwt"
+              ],
+              "properties": {
+                "jwt": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "UserInput": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/User"
+        },
+        {
+          "required": [
+            "name",
+            "email",
+            "password"
+          ]
+        }
+      ]
+    },
+    "UserOutput": {
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorOutput": {
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Snippet": {
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "SnippetInput": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Snippet"
+        },
+        {
+          "required": [
+            "content"
+          ]
+        }
+      ]
+    },
+    "SnippetOutput": {
+      "required": [
+        "id",
+        "title",
+        "content",
+        "author"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "author": {
+          "type": "object",
+          "required": [
+            "id",
+            "name"
+          ],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Comment": {
+      "properties": {
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "CommentInput": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Comment"
+        },
+        {
+          "required": [
+            "content"
+          ]
+        }
+      ]
+    },
+    "CommentOutput": {
+      "required": [
+        "id",
+        "content",
+        "author",
+        "snippet_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string"
+        },
+        "author": {
+          "type": "object",
+          "required": [
+            "id",
+            "name"
+          ],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "snippet_id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}
