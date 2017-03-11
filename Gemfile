@@ -11,7 +11,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'knock'
 gem 'puma', '~> 3.0'
 gem 'rack-cors', require: 'rack/cors'
-gem 'rails', '~> 5.0.1'
+gem 'rails', '~> 5.0'
 gem 'swagger-blocks'
 
 group :development, :test do
