@@ -1,0 +1,3 @@
+language: ruby
+env:
+  - TZ=Asia/Tokyo
