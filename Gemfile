@@ -8,6 +8,7 @@ end
 gem 'bcrypt', '~> 3.1.7'
 gem 'ffaker'
 gem 'jbuilder', '~> 2.5'
+gem 'kaminari'
 gem 'knock'
 gem 'puma', '~> 3.0'
 gem 'rack-cors', require: 'rack/cors'
