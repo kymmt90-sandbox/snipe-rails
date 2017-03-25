@@ -70,6 +70,8 @@ module Swagger::SnippetApiSchema
         key :description, "Returns the specified user's snippets"
         key :operationId, :find_snippets_by_user_id
 
+        parameter :page
+
         response 200 do
           key :description, 'Snippets of the user specified by its ID'
           schema type: :array do
@@ -109,6 +111,8 @@ module Swagger::SnippetApiSchema
       operation :get do
         key :description, 'Returns all snippets'
         key :operationId, :get_all_snippets
+
+        parameter :page
 
         response 200 do
           key :description, 'All snippets'
