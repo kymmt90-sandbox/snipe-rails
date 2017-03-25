@@ -191,20 +191,13 @@ RSpec.describe 'Snippet API', type: :request do
   end
 
   describe 'GET /snippets.json' do
-    let(:users) { build_pair(:user) }
-
-    before do
-      users.size.times { |n| create_pair(:snippet, author: users[n]) }
-      get "/snippets.json"
-    end
-
-    it 'returns an array of snippets where each element has snippet attributes' do
-      expect(response.status).to eq 200
-
-      snippets = JSON.parse(response.body)
-      expect(snippets.size).to eq 4
-
-      expected_json = [
+    let(:users) { create_pair(:user) }
+    let(:total_snippets) { 50 * users.size }
+    let(:per_page) { 30 }
+    let(:total_pages) { (total_snippets / per_page) + 1 }
+    let(:snippets_size) { per_page }
+    let(:expected_json) {
+      [
         {
           id:      Numeric,
           title:   String,
@@ -213,8 +206,52 @@ RSpec.describe 'Snippet API', type: :request do
             id:   Numeric,
             name: String
           }
-        }] * 4
-      expect(response.body).to be_json_as expected_json
+        }
+      ] * snippets_size
+    }
+
+    before do
+      users.size.times { |n| create_list(:snippet, total_snippets / users.size, author: users[n]) }
+    end
+
+    context 'with the page number' do
+      let(:expected_link_header) {
+        %(<#{origin}/snippets?page=1>; rel="first", <#{origin}/snippets?page=2>; rel="next", <#{origin}/snippets?page=#{total_pages}>; rel="last")
+      }
+
+      before do
+        get '/snippets.json', params: { page: 1 }
+      end
+
+      it 'returns an array of snippets where each element has snippet attributes' do
+        expect(response.status).to eq 200
+        expect(response.headers['Link']).to eq expected_link_header
+
+        snippets = JSON.parse(response.body)
+        expect(snippets.size).to eq snippets_size
+
+        expect(response.body).to be_json_as expected_json
+      end
+    end
+
+    context 'with the out-of-range page number' do
+      let(:expected_link_header) {
+        %(<#{origin}/snippets?page=1>; rel="first", <#{origin}/snippets?page=#{total_pages}>; rel="last")
+      }
+
+      before do
+        get '/snippets.json', params: { page: total_pages + 1 }
+      end
+
+      it 'returns an empty array' do
+        expect(response.status).to eq 200
+        expect(response.headers['Link']).to eq expected_link_header
+
+        snippets = JSON.parse(response.body)
+        expect(snippets.size).to eq 0
+
+        expect(response.body).to be_json_as []
+      end
     end
   end
 
