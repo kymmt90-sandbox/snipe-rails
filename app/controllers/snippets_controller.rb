@@ -8,7 +8,7 @@ class SnippetsController < ApplicationController
 
   def index
     relation = Snippet.includes(:author)
-    if params[:user_id].present?
+    if params[:user_id]
       author = User.find(params[:user_id])
       relation = relation.where(author_id: author.id)
       response.headers['Link'] = link_header(url_for(:user_snippets), author.id)

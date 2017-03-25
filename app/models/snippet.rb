@@ -10,10 +10,7 @@ class Snippet < ApplicationRecord
   has_many :starring_users, through: :stars, class_name: 'User'
 
   def self.total_pages(author_id = nil)
-    if author_id
-      where(author_id: author_id).total_pages
-    else
-      page(1).total_pages
-    end
+    relation = author_id ? where(author_id: author_id) : page(1)
+    relation.total_pages
   end
 end
