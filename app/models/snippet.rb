@@ -9,13 +9,17 @@ class Snippet < ApplicationRecord
   has_many :stars, foreign_key: 'snippet_id'
   has_many :starring_users, through: :stars, class_name: 'User'
 
-  def self.total_pages(author_id = nil)
-    relation = author_id ? where(author_id: author_id) : page(1)
-    relation.total_pages
-  end
+  concerning :Pagination do
+    class_methods do
+      def total_pages(author_id = nil)
+        relation = author_id ? where(author_id: author_id) : page(1)
+        relation.total_pages
+      end
 
-  def self.page_out_of_range?(page, author_id = nil)
-    relation = author_id ? where(author_id: author_id).page(page) : page(page)
-    relation.out_of_range?
+      def page_out_of_range?(page, author_id = nil)
+        relation = author_id ? where(author_id: author_id).page(page) : page(page)
+        relation.out_of_range?
+      end
+    end
   end
 end
