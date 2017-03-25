@@ -13,4 +13,9 @@ class Snippet < ApplicationRecord
     relation = author_id ? where(author_id: author_id) : page(1)
     relation.total_pages
   end
+
+  def self.page_out_of_range?(page, author_id = nil)
+    relation = author_id ? where(author_id: author_id).page(page) : page(page)
+    relation.out_of_range?
+  end
 end

@@ -63,7 +63,7 @@ class SnippetsController < ApplicationController
 
   def link_header(url, author_id = nil)
     @current_page = Snippet.page(params[:page]).current_page
-    @page_out_of_range = Snippet.page(params[:page]).out_of_range?
+    @page_out_of_range = Snippet.page_out_of_range?(params[:page], author_id)
     @total_pages = Snippet.total_pages(author_id)
 
     [first_link(url), previous_link(url), next_link(url), last_link(url)].compact.join(', ')
