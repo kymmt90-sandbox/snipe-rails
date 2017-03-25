@@ -169,7 +169,7 @@ RSpec.describe 'Snippet API', type: :request do
           get "/users/#{user.id}/snippets.json", params: { page: 5 }
         end
 
-        it 'returns an array of snippets where each element has snippet attributes' do
+        it 'returns an empty array' do
           expect(response.status).to eq 200
           expect(response.headers['Link']).to eq expected_link_header
 
