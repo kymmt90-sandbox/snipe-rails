@@ -20,6 +20,15 @@ module Swagger::Parameters
       end
     end
 
+    base.parameter :page do
+      key :name, :page
+      key :description, 'Page number'
+      key :in, :query
+      key :required, false
+      key :type, :integer
+      key :format, :int64
+    end
+
     base.parameter :user_id do
       key :in, :path
       key :description, 'User ID'
