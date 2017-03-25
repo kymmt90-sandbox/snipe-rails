@@ -7,12 +7,12 @@ class SnippetsController < ApplicationController
   INDEX_MAX_SNIPPETS = 3000
 
   def index
+    relation = Snippet.includes(:author)
     if params[:user_id].present?
-      @author = User.find(params[:user_id])
-      @snippets = Snippet.where(author: @author)
-    else
-      @snippets = Snippet.limit(INDEX_MAX_SNIPPETS)
+      author = User.find(params[:user_id])
+      relation = relation.where(author_id: author)
     end
+    @snippets = relation.limit(INDEX_MAX_SNIPPETS).page(params[:page])
   end
 
   def show
