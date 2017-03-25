@@ -61,7 +61,7 @@ RSpec.describe 'Snippet API', type: :request do
 
       context 'with a request without the page number' do
         let(:expected_link_header) {
-          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=2>; rel="next", <#{origin}/users/1/snippets?page=#{total_pages}>; rel="last")
+          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=2>; rel="next", <#{origin}/users/#{user.id}/snippets?page=#{total_pages}>; rel="last")
         }
 
         before do
@@ -81,7 +81,7 @@ RSpec.describe 'Snippet API', type: :request do
 
       context 'with a request which has the less than 1 page number' do
         let(:expected_link_header) {
-          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=2>; rel="next", <#{origin}/users/1/snippets?page=#{total_pages}>; rel="last")
+          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=2>; rel="next", <#{origin}/users/#{user.id}/snippets?page=#{total_pages}>; rel="last")
         }
 
         before do
@@ -101,7 +101,7 @@ RSpec.describe 'Snippet API', type: :request do
 
       context 'with a request which has the first page number' do
         let(:expected_link_header) {
-          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=2>; rel="next", <#{origin}/users/1/snippets?page=#{total_pages}>; rel="last")
+          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=2>; rel="next", <#{origin}/users/#{user.id}/snippets?page=#{total_pages}>; rel="last")
         }
 
         before do
@@ -121,7 +121,7 @@ RSpec.describe 'Snippet API', type: :request do
 
       context 'with a request which has the middle page number' do
         let(:expected_link_header) {
-          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=1>; rel="previous", <#{origin}/users/#{user.id}/snippets?page=3>; rel="next", <#{origin}/users/1/snippets?page=#{total_pages}>; rel="last")
+          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=1>; rel="previous", <#{origin}/users/#{user.id}/snippets?page=3>; rel="next", <#{origin}/users/#{user.id}/snippets?page=#{total_pages}>; rel="last")
         }
 
         before do
@@ -141,7 +141,7 @@ RSpec.describe 'Snippet API', type: :request do
 
       context 'with a request which has the last page number' do
         let(:expected_link_header) {
-          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=3>; rel="previous", <#{origin}/users/1/snippets?page=#{total_pages}>; rel="last")
+          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=3>; rel="previous", <#{origin}/users/#{user.id}/snippets?page=#{total_pages}>; rel="last")
         }
         let(:snippets_size) { total_snippets % per_page }
 
@@ -162,7 +162,7 @@ RSpec.describe 'Snippet API', type: :request do
 
       context 'with a request which has the out-of-range page number' do
         let(:expected_link_header) {
-          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/1/snippets?page=#{total_pages}>; rel="last")
+          %(<#{origin}/users/#{user.id}/snippets?page=1>; rel="first", <#{origin}/users/#{user.id}/snippets?page=#{total_pages}>; rel="last")
         }
 
         before do
