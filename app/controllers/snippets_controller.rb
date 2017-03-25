@@ -75,13 +75,11 @@ class SnippetsController < ApplicationController
 
   def previous_link(url)
     return if @page_out_of_range || @current_page <= 1
-
     %(<#{url}?page=#{@current_page - 1}>; rel="previous")
   end
 
   def next_link(url)
     return if @page_out_of_range || @current_page >= @total_pages
-
     %(<#{url}?page=#{@current_page + 1}>; rel="next")
   end
 
