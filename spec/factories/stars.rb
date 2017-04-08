@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :star do
-    user
-    snippet
+    association :starring_user, factory: :user
+    association :starred_snippet, factory: :snippet
   end
 end
