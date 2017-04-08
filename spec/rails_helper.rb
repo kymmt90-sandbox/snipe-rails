@@ -65,12 +65,4 @@ RSpec.configure do |config|
 
   require 'support/test_helper'
   config.include TestHelper
-
-  config.before :suite do
-    begin
-      FactoryGirl.lint traits: true
-    ensure
-      DatabaseRewinder.clean_all
-    end
-  end
 end
