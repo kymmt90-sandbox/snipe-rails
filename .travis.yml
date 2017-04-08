@@ -3,5 +3,7 @@ rvm:
   - 2.4.0
 env:
   - TZ=Asia/Tokyo
-script:
+before_script:
   - bin/rails db:migrate RAILS_ENV=test
+script:
+  - bin/rake
