@@ -68,7 +68,7 @@ RSpec.configure do |config|
 
   config.before :suite do
     begin
-      FactoryGirl.lint
+      FactoryGirl.lint traits: true
     ensure
       DatabaseRewinder.clean_all
     end
