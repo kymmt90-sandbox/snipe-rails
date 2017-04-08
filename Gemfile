@@ -16,8 +16,9 @@ gem 'rails', '~> 5.0'
 gem 'swagger-blocks'
 
 group :development, :test do
-  gem 'byebug', platform: :mri
+  gem 'database_rewinder'
   gem 'factory_girl_rails'
+  gem 'pry-byebug'
   gem 'rspec-json_matcher'
   gem 'rspec-rails'
   gem 'sqlite3'
