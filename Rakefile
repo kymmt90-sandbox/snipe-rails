@@ -3,4 +3,6 @@
 
 require_relative 'config/application'
 
+task default: :spec_with_lint
+
 Rails.application.load_tasks
