@@ -5,6 +5,14 @@ class UsersController < ApplicationController
   before_action :authenticate_user, only: [:update, :destroy]
 
   def show
+    if @user.blank?
+      authenticate_user
+      if @user = current_user
+        render status: :ok
+      else
+        head :unauthorized
+      end
+    end
   end
 
   def create
@@ -36,7 +44,7 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find(params[:id])
+    @user = User.find(params[:id]) if params[:id].present?
   end
 
   def user_params
