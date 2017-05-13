@@ -255,7 +255,7 @@ RSpec.describe 'Snippet API', type: :request do
     end
   end
 
-  describe 'POST /users/:user_id/snippets' do
+  describe 'POST /snippets' do
     let(:snippet_attributes) { attributes_for(:snippet) }
     let(:snippet_params) {
       { snippet:
@@ -268,10 +268,10 @@ RSpec.describe 'Snippet API', type: :request do
 
     include_context 'the user has the authentication token'
 
-    context 'when the specified user exists and parameters are valid' do
-      it 'creates the snippet returns its attributes' do
+    context 'when parameters are valid' do
+      it 'creates the snippet and returns its attributes' do
         expect  {
-          post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
+          post "/snippets.json", params: snippet_params, headers: authenticated_header
         }.to change(Snippet, :count).by 1
 
         expect(response.status).to eq 201
@@ -287,29 +287,21 @@ RSpec.describe 'Snippet API', type: :request do
         }
         expect(response.body).to be_json_as expected_json
       end
-
-      context 'when other user sends the request' do
-        let(:other_user) { build_stubbed(:user) }
-        let(:authenticated_header) { authentication_token_header(other_user) }
-
-        it 'returns 401 Unauthorized' do
-          post "/users/#{user.id}/snippets.json", params: snippet_params, headers: authenticated_header
-          expect(response.status).to eq 401
-        end
-      end
     end
 
-    context 'when the specified user does not exist' do
+    context 'when the authentication token does not exist' do
       before do
-        post "/users/#{User.last.id.succ}/snippets.json", params: snippet_params, headers: authenticated_header
+        post "/snippets.json", params: snippet_params
       end
 
-      include_examples 'The resource is not found'
+      it 'returns 401 Unauthorized' do
+        expect(response.status).to eq 401
+      end
     end
 
     context 'when parameters are invalid' do
       it 'returns an error' do
-        post "/users/#{user.id}/snippets.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header
+        post "/snippets.json", params: snippet_params.merge(snippet: { content: '' }), headers: authenticated_header
 
         expect(response.status).to eq 400
 
@@ -322,7 +314,7 @@ RSpec.describe 'Snippet API', type: :request do
 
     context 'when parameters are empty' do
       before do
-        post "/users/#{user.id}/snippets.json", params: {}, headers: authenticated_header
+        post "/snippets.json", params: {}, headers: authenticated_header
       end
 
       include_examples 'Required parameters are missing'
