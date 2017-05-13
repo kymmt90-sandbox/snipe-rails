@@ -23,8 +23,7 @@ class SnippetsController < ApplicationController
   end
 
   def create
-    @author = User.find(params[:user_id])
-    head :unauthorized and return unless current_user == @author
+    head :unauthorized and return unless @author = current_user
 
     @snippet = Snippet.new(snippet_params.merge(author: @author))
     if @snippet.save

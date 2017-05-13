@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       put 'star', to: 'stars#create'
     end
   end
-  resources :snippets, only: [:index]
+  resources :snippets, only: [:index, :create]
   get 'api-docs', to: 'apidocs#index'
   match '*path', to: 'application#not_found', via: :all
 end
