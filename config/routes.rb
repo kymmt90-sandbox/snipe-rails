@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   post 'user_token', to: 'user_token#create'
   resource :user, only: [:show]
   resources :users, except: [:index] do
-    resources :snippets, shallow: true do
+    resources :snippets, shallow: true, except: [:create] do
       resources :comments, shallow: true
       resource :star, only: [:show, :destroy]
       put 'star', to: 'stars#create'
