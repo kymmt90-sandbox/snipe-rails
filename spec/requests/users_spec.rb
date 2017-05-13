@@ -1,6 +1,29 @@
 require 'rails_helper'
 
 RSpec.describe 'User API', type: :request do
+  describe 'GET /user.json' do
+    context 'when the request is with an authentication token' do
+      include_context 'the user has the authentication token'
+
+      it 'returns the user corresponding with the authentication token' do
+        get '/user.json', headers: authenticated_header
+
+        expected_json = {
+          id:   user.id,
+          name: user.name
+        }
+        expect(response.body).to be_json_as expected_json
+      end
+    end
+
+    context 'when the request is without an authentication token' do
+      it 'returns 401 Unauthorized' do
+        get '/user.json'
+        expect(response.status).to eq 401
+      end
+    end
+  end
+
   describe 'GET /users/:id.json' do
     context 'when the specified user exists' do
       let(:user) { create(:user) }
