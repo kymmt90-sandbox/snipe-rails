@@ -1,4 +1,5 @@
 language: ruby
+services: mysql
 env:
   - TZ=Asia/Tokyo
 before_script:
