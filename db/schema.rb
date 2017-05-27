@@ -10,37 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170115082802) do
+ActiveRecord::Schema.define(version: 20170527153434) do
 
-  create_table "comments", force: :cascade do |t|
-    t.string   "content",           null: false
+  create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text     "content",           limit: 65535, null: false
     t.integer  "comment_author_id"
     t.integer  "snippet_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.index ["comment_author_id"], name: "index_comments_on_comment_author_id"
-    t.index ["snippet_id"], name: "index_comments_on_snippet_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.index ["comment_author_id"], name: "index_comments_on_comment_author_id", using: :btree
+    t.index ["snippet_id"], name: "index_comments_on_snippet_id", using: :btree
   end
 
-  create_table "snippets", force: :cascade do |t|
+  create_table "snippets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title"
-    t.text     "content",    null: false
+    t.text     "content",    limit: 65535, null: false
     t.integer  "author_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["author_id"], name: "index_snippets_on_author_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["author_id"], name: "index_snippets_on_author_id", using: :btree
   end
 
-  create_table "stars", force: :cascade do |t|
+  create_table "stars", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.integer  "snippet_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["snippet_id"], name: "index_stars_on_snippet_id"
-    t.index ["user_id"], name: "index_stars_on_user_id"
+    t.index ["snippet_id"], name: "index_stars_on_snippet_id", using: :btree
+    t.index ["user_id"], name: "index_stars_on_user_id", using: :btree
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",            null: false
     t.string   "email",           null: false
     t.string   "password_digest", null: false
