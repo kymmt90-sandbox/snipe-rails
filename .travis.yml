@@ -1,6 +1,4 @@
 language: ruby
-rvm:
-  - 2.4.0
 env:
   - TZ=Asia/Tokyo
 before_script:
