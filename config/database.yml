@@ -4,12 +4,12 @@ default: &default
   pool: 5
   username: root
   password:
-  host: 127.0.0.1
-  port: 3306
+  host: localhost
 
 development:
   <<: *default
   database: snipe
+  host: db
 
 test:
   <<: *default

@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "3306:3306"
+  app:
+    build: .
+    command: bin/rails s -p 3001 -b '0.0.0.0'
+    volumes:
+      - .:/snipe-rails
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    links:
+      - db
+volumes:
+  mysql_data:
