@@ -4,7 +4,7 @@
 
 A Gist clone API for my practice.
 
-## Start developement environment
+## Start development environment
 
 ```
 $ docker-compose run --rm app bin/rails db:setup
