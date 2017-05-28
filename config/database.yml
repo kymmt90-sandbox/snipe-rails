@@ -4,11 +4,12 @@ default: &default
   pool: 5
   username: root
   password:
-  host: db
+  host: localhost
 
 development:
   <<: *default
   database: snipe
+  host: db
 
 test:
   <<: *default
