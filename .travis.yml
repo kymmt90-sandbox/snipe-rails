@@ -2,6 +2,7 @@ language: ruby
 services: mysql
 env:
   - TZ=Asia/Tokyo
+  - CI=yes
 before_install:
   - mysql -e 'CREATE DATABASE snipe_test;'
 before_script:

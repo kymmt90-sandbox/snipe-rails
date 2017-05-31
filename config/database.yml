@@ -13,6 +13,10 @@ development:
 test:
   <<: *default
   database: snipe_test
+<% if ENV['CI'] == 'yes' %>
+  host: localhost
+  port: 3306
+<% end %>
 
 production:
   <<: *default
