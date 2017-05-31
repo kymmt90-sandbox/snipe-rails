@@ -1,10 +1,12 @@
 language: ruby
-services: docker
+services: mysql
 env:
   - TZ=Asia/Tokyo
 before_install:
-  - docker-compose run --rm app bin/rake db:setup
+  - mysql -e 'CREATE DATABASE snipe_test;'
+before_script:
+  - bin/rails db:migrate RAILS_ENV=test
 script:
-  - docker-compose run --rm app bin/rake
+  - bin/rake
 notifications:
   email: false
