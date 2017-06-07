@@ -8,6 +8,5 @@ COPY Gemfile $APP_HOME
 COPY Gemfile.lock $APP_HOME
 
 ENV BUNDLE_GEMFILE=$APP_HOME/Gemfile \
-    BUNDLE_JOBS=4 \
-    BUNDLE_PATH=/usr/src/bundle
+    BUNDLE_JOBS=4
 RUN bundle install
