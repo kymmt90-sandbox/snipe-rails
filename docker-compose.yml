@@ -13,9 +13,11 @@ services:
     command: bin/rails s -p 3001 -b "0.0.0.0"
     volumes:
       - .:/usr/src/app
+      - bundle:/usr/src/bundle
     ports:
       - "3001:3001"
     depends_on:
       - db
 volumes:
+  bundle:
   mysql_data:
