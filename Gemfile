@@ -22,6 +22,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-json_matcher'
   gem 'rspec-rails'
+  gem 'spring-commands-rspec'
 end
 
 group :development do
