@@ -1,23 +1,36 @@
 version: '3'
 services:
   db:
-    image: mysql:5.7
-    volumes:
-      - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    image: mysql:5.7
     ports:
       - "3306:3306"
-  app:
+    volumes:
+      - mysql_data:/var/lib/mysql
+  app: &app_base
     build: .
     command: bin/rails s -p 3001 -b "0.0.0.0"
-    volumes:
-      - .:/usr/src/app
-      - bundle:/usr/src/bundle
-    ports:
-      - "3001:3001"
     depends_on:
       - db
+    environment:
+      - SPRING_SOCKET=/tmp/spring/spring.sock
+    ports:
+      - "3001:3001"
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/usr/src/app
+      - bundle_cache:/usr/local/bundle
+  spring:
+    <<: *app_base
+    command: bin/spring server
+    ports: []
+    volumes:
+      - .:/usr/src/app
+      - bundle_cache:/usr/local/bundle
+      - spring:/tmp/spring
 volumes:
-  bundle:
+  bundle_cache:
   mysql_data:
+  spring:
