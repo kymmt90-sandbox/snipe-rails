@@ -22,7 +22,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-json_matcher'
   gem 'rspec-rails'
-  gem 'rubocop'
+  gem 'rubocop', '~> 0.49.1', require: false
   gem 'spring-commands-rspec'
 end
 
