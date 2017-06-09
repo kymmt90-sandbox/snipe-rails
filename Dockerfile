@@ -6,7 +6,7 @@ WORKDIR $APP_HOME
 
 COPY Gemfile \
      Gemfile.lock \
-     $APP_HOME
+     $APP_HOME/
 
 ENV BUNDLE_GEMFILE=$APP_HOME/Gemfile \
     BUNDLE_JOBS=4
