@@ -13,8 +13,6 @@ services:
     command: bin/rails s -p 3001 -b "0.0.0.0"
     depends_on:
       - db
-    environment:
-      - SPRING_SOCKET=/tmp/spring/spring.sock
     ports:
       - "3001:3001"
     stdin_open: true
@@ -26,11 +24,6 @@ services:
     <<: *app_base
     command: bin/spring server
     ports: []
-    volumes:
-      - .:/usr/src/app
-      - bundle_cache:/usr/local/bundle
-      - spring:/tmp/spring
 volumes:
   bundle_cache:
   mysql_data:
-  spring:
